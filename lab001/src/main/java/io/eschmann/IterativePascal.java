@@ -7,15 +7,15 @@ import java.util.HashMap;
 /**
  * Created by eschmar on 03/11/16.
  */
-public class RecursivePascal implements Pascal {
+public class IterativePascal implements Pascal {
     private boolean reverse = false;
     private HashMap binomMap;
 
-    public RecursivePascal() {
+    public IterativePascal() {
         this.binomMap = new HashMap<String, Integer>();
     }
 
-    public RecursivePascal(boolean reverse) {
+    public IterativePascal(boolean reverse) {
         this.reverse = reverse;
         this.binomMap = new HashMap<String, Integer>();
     }
@@ -25,21 +25,36 @@ public class RecursivePascal implements Pascal {
             return;
         }
 
-        StringBuilder row = new StringBuilder();
+        StringBuilder result = new StringBuilder();
 
         for (int i = 0; i <= n; i++) {
-            row.append(binom(n, i) + " ");
+            StringBuilder row = new StringBuilder();
+
+            for (int j = 0; j <= i; j++) {
+                row.append(binom(i, j) + " ");
+            }
+
+            if (reverse) {
+                result.insert(0, row + "\n");
+            }else {
+                result.append(row).append("\n");
+            }
         }
 
-        if (reverse) {
-            StdOut.print(row + "\n");
+        StdOut.println(result);
+    }
+
+    private int factorial(int x) {
+        if (x <= 1) {
+            return 1;
         }
 
-        printPascal(--n);
-
-        if (!reverse) {
-            StdOut.print(row + "\n");
+        int result = x;
+        for (int i = 1; i < x; i++) {
+            result *= i;
         }
+
+        return result;
     }
 
     public int binom(int n, int k) {
@@ -54,7 +69,7 @@ public class RecursivePascal implements Pascal {
             return (Integer) binomMap.get(key);
         }
 
-        int result = binom(n - 1, k - 1) + binom(n - 1, k);
+        int result = (int) (factorial(n) / (factorial(k) * factorial(n - k)));
         binomMap.put(key, result);
         return result;
     }

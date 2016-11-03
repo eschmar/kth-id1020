@@ -21,7 +21,7 @@ public class Main {
             String reverse = StdIn.readString();
 
             StdOut.println("\nTriangle:\n");
-            RecursivePascal pt = new RecursivePascal(reverse.equals("y") ? true : false);
+            IterativePascal pt = new IterativePascal(reverse.equals("y") ? true : false);
             pt.printPascal(n);
 
             StdOut.print("\nRepeat [y/n]? ");
