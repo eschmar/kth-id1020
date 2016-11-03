@@ -2,25 +2,22 @@ package io.eschmann;
 
 import edu.princeton.cs.introcs.StdOut;
 
-import java.util.HashMap;
-
 /**
  * Created by eschmar on 03/11/16.
  */
-public class IterativePascal implements Pascal {
-    private boolean reverse = false;
-    private HashMap binomMap;
+public class IterativePascal extends ErrorPascal implements Pascal {
 
     public IterativePascal() {
-        this.binomMap = new HashMap<String, Integer>();
+        super();
     }
 
     public IterativePascal(boolean reverse) {
-        this.reverse = reverse;
-        this.binomMap = new HashMap<String, Integer>();
+        super(reverse);
     }
 
     public void printPascal(int n) {
+        isGreaterThanZero(n);
+
         if (n < 0) {
             return;
         }
@@ -44,32 +41,20 @@ public class IterativePascal implements Pascal {
         StdOut.println(result);
     }
 
-    private int factorial(int x) {
-        if (x <= 1) {
-            return 1;
-        }
-
-        int result = x;
-        for (int i = 1; i < x; i++) {
-            result *= i;
-        }
-
-        return result;
-    }
-
     public int binom(int n, int k) {
+        validateBinomialCoefficientArguments(n, k);
         if (k == n || k == 0) {
             return 1;
         }
 
-        // check if already calculated (symmetry!)
-        String key = n + "," + (k > (n / 2) ? (n - k) : k);
+        String key = getBinomHashKey(n, k);
 
         if (binomMap.containsKey(key)) {
             return (Integer) binomMap.get(key);
         }
 
-        int result = (int) (factorial(n) / (factorial(k) * factorial(n - k)));
+        int result = (int) (factorial(n, k) / factorial(n - k));
+        //int result = (int) (factorial(n) / (factorial(k) * factorial(n - k)));
         binomMap.put(key, result);
         return result;
     }
