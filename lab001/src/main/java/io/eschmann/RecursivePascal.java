@@ -2,17 +2,23 @@ package io.eschmann;
 
 import edu.princeton.cs.introcs.StdOut;
 
+import java.util.HashMap;
+
 /**
  * Created by eschmar on 03/11/16.
  */
 public class RecursivePascal {
     private boolean reverse = false;
+    private HashMap binomMap;
+
+    public RecursivePascal() {
+        this.binomMap = new HashMap<String, Integer>();
+    }
 
     public RecursivePascal(boolean reverse) {
         this.reverse = reverse;
+        this.binomMap = new HashMap<String, Integer>();
     }
-
-    public RecursivePascal() {}
 
     public void printPascal(int n) {
         if (n < 0) {
@@ -41,6 +47,14 @@ public class RecursivePascal {
             return 1;
         }
 
-        return binom(n - 1, k - 1) + binom(n - 1, k);
+        String key = n + "," + k;
+
+        if (binomMap.containsKey(key)) {
+            return (Integer) binomMap.get(key);
+        }
+
+        int result = binom(n - 1, k - 1) + binom(n - 1, k);
+        binomMap.put(key, result);
+        return result;
     }
 }
