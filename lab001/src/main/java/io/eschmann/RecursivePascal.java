@@ -5,15 +5,26 @@ import edu.princeton.cs.introcs.StdOut;
 /**
  * Created by eschmar on 03/11/16.
  */
-public class PascalTriangle {
-    public void printPascal(int n) {
-        for (int i = 0; i <= n; i++) {
-            for (int j = 0; j <= i; j++) {
-                StdOut.printf("%d ", binom(i, j));
-            }
+public class RecursivePascal {
+    private boolean reverse = false;
 
-            StdOut.println("");
+    public RecursivePascal(boolean reverse) {
+        this.reverse = reverse;
+    }
+
+    public RecursivePascal() {}
+
+    public void printPascal(int n) {
+        if (n < 0) {
+            return;
         }
+
+        for (int i = 0; i <= n; i++) {
+            StdOut.printf("%d ", binom(n, i));
+        }
+
+        StdOut.println("");
+        printPascal(--n);
     }
 
     public int binom(int n, int k) {

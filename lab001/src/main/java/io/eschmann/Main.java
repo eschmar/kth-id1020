@@ -8,7 +8,7 @@ import edu.princeton.cs.introcs.StdOut;
 public class Main {
     public static void main(String[] args) {
         StdOut.println("Pew!");
-        PascalTriangle pt = new PascalTriangle();
+        RecursivePascal pt = new RecursivePascal();
         pt.printPascal(5);
     }
 }
