@@ -15,12 +15,7 @@ public class RecursivePascal extends ErrorPascal implements Pascal {
     }
 
     public void printPascal(int n) {
-        isGreaterThanZero(n);
-
-        if (n < 0) {
-            return;
-        }
-
+        validateIsPositive(n);
         StringBuilder row = new StringBuilder();
 
         for (int i = 0; i <= n; i++) {
@@ -31,7 +26,9 @@ public class RecursivePascal extends ErrorPascal implements Pascal {
             StdOut.print(row + "\n");
         }
 
-        printPascal(--n);
+        if (--n >= 0) {
+            printPascal(n);
+        }
 
         if (!reverse) {
             StdOut.print(row + "\n");

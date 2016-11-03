@@ -16,12 +16,7 @@ public class IterativePascal extends ErrorPascal implements Pascal {
     }
 
     public void printPascal(int n) {
-        isGreaterThanZero(n);
-
-        if (n < 0) {
-            return;
-        }
-
+        validateIsPositive(n);
         StringBuilder result = new StringBuilder();
 
         for (int i = 0; i <= n; i++) {

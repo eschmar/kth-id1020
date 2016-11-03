@@ -21,8 +21,8 @@ abstract public class ErrorPascal implements Pascal {
     abstract public void printPascal(int n);
     abstract public int binom(int n, int k);
 
-    protected void isGreaterThanZero(int x) {
-        if (x < 1) {
+    protected void validateIsPositive(int x) {
+        if (x < 0) {
             throw new IllegalArgumentException("Argument has to be greater than 0.");
         }
     }
