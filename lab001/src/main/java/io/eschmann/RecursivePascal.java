@@ -19,12 +19,21 @@ public class RecursivePascal {
             return;
         }
 
+        StringBuilder row = new StringBuilder();
+
         for (int i = 0; i <= n; i++) {
-            StdOut.printf("%d ", binom(n, i));
+            row.append(binom(n, i) + " ");
         }
 
-        StdOut.println("");
+        if (reverse) {
+            StdOut.print(row + "\n");
+        }
+
         printPascal(--n);
+
+        if (!reverse) {
+            StdOut.print(row + "\n");
+        }
     }
 
     public int binom(int n, int k) {
