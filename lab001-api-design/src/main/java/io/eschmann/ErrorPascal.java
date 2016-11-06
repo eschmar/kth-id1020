@@ -36,24 +36,17 @@ abstract public class ErrorPascal implements Pascal {
     }
 
     protected String getBinomHashKey(int n, int k) {
-        // check if already calculated (symmetry!)
+        // exploits symmetry
         return n + "," + (k > (n / 2) ? (n - k) : k);
     }
 
-    protected int factorial(int x) {
-        return factorial(x, 0);
-    }
+    protected String getPascalRow(int n) {
+        StringBuilder row = new StringBuilder();
 
-    protected int factorial(int x, int until) {
-        if (x <= 1) {
-            return 1;
+        for (int i = 0; i <= n; i++) {
+            row.append(binom(n, i) + " ");
         }
 
-        int result = x;
-        for (int i = x - 1; i > until; i--) {
-            result *= i;
-        }
-
-        return result;
+        return row.toString();
     }
 }

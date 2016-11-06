@@ -6,6 +6,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>lab001</module>
+        <module>lab001-recursion</module>
+        <module>lab001-api-design</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>kth-id1020</artifactId>

@@ -9,7 +9,5 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>kth-id1020-lab001</artifactId>
-
-
+    <artifactId>kth-id1020-lab001-recursion</artifactId>
 </project>

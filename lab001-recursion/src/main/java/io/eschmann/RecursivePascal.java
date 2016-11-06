@@ -1,21 +1,24 @@
 package io.eschmann;
 
-import edu.princeton.cs.introcs.StdOut;
+import java.util.HashMap;
 
 /**
  * Created by eschmar on 03/11/16.
  */
-public class RecursivePascal extends ErrorPascal implements Pascal {
+public class RecursivePascal {
+    protected boolean reverse = false;
+    protected HashMap binomMap;
+
     public RecursivePascal() {
-        super();
+        this.binomMap = new HashMap<String, Integer>();
     }
 
     public RecursivePascal(boolean reverse) {
-        super(reverse);
+        this.reverse = reverse;
+        this.binomMap = new HashMap<String, Integer>();
     }
 
     public void printPascal(int n) {
-        validateIsPositive(n);
         StringBuilder row = new StringBuilder();
 
         for (int i = 0; i <= n; i++) {
@@ -23,21 +26,19 @@ public class RecursivePascal extends ErrorPascal implements Pascal {
         }
 
         if (reverse) {
-            StdOut.print(row + "\n");
+            System.out.println(row);
         }
 
-        if (--n >= 0) {
-            printPascal(n);
+        if (n > 0) {
+            printPascal(n - 1);
         }
 
         if (!reverse) {
-            StdOut.print(row + "\n");
+            System.out.println(row);
         }
     }
 
     public int binom(int n, int k) {
-        validateBinomialCoefficientArguments(n, k);
-
         if (k == n || k == 0) {
             return 1;
         }
@@ -51,5 +52,10 @@ public class RecursivePascal extends ErrorPascal implements Pascal {
         int result = binom(n - 1, k - 1) + binom(n - 1, k);
         binomMap.put(key, result);
         return result;
+    }
+
+    protected String getBinomHashKey(int n, int k) {
+        // exploits symmetry
+        return n + "," + (k > (n / 2) ? (n - k) : k);
     }
 }

@@ -1,12 +1,11 @@
 package io.eschmann;
 
-import edu.princeton.cs.introcs.StdOut;
+import java.util.HashMap;
 
 /**
  * Created by eschmar on 03/11/16.
  */
 public class IterativePascal extends ErrorPascal implements Pascal {
-
     public IterativePascal() {
         super();
     }
@@ -20,11 +19,7 @@ public class IterativePascal extends ErrorPascal implements Pascal {
         StringBuilder result = new StringBuilder();
 
         for (int i = 0; i <= n; i++) {
-            StringBuilder row = new StringBuilder();
-
-            for (int j = 0; j <= i; j++) {
-                row.append(binom(i, j) + " ");
-            }
+            String row = getPascalRow(i);
 
             if (reverse) {
                 result.insert(0, row + "\n");
@@ -33,24 +28,23 @@ public class IterativePascal extends ErrorPascal implements Pascal {
             }
         }
 
-        StdOut.println(result);
+        System.out.println(result);
     }
 
     public int binom(int n, int k) {
         validateBinomialCoefficientArguments(n, k);
-        if (k == n || k == 0) {
-            return 1;
-        }
-
         String key = getBinomHashKey(n, k);
 
         if (binomMap.containsKey(key)) {
             return (Integer) binomMap.get(key);
         }
 
-        int result = (int) (factorial(n, k) / factorial(n - k));
-        //int result = (int) (factorial(n) / (factorial(k) * factorial(n - k)));
-        binomMap.put(key, result);
-        return result;
+        double result = 1;
+        for (double i = 1; i <= k; i++) {
+            result *= (((double)n - ((double)k - i)) / i);
+        }
+
+        binomMap.put(key, (int) result);
+        return (int) result;
     }
 }

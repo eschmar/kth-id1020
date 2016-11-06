@@ -1,7 +1,7 @@
 package io.eschmann;
 
 /**
- * Created by eschmar on 03/11/16.
+ * Created by eschmar on 06/11/16.
  */
 public interface Pascal {
     void printPascal(int n);
