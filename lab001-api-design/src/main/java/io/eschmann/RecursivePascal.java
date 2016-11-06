@@ -48,9 +48,4 @@ public class RecursivePascal extends ErrorPascal implements Pascal {
         binomMap.put(key, result);
         return result;
     }
-
-    protected String getBinomHashKey(int n, int k) {
-        // exploits symmetry
-        return n + "," + (k > (n / 2) ? (n - k) : k);
-    }
 }
