@@ -39,12 +39,19 @@ public class IterativePascal extends ErrorPascal implements Pascal {
             return (Integer) binomMap.get(key);
         }
 
-        double result = 1;
-        for (double i = 1; i <= k; i++) {
-            result *= (((double)n - ((double)k - i)) / i);
+        int[] coeff = new int[n + 1];
+        coeff[0] = 1;
+
+        for (int i = 1; i <= n; i++) {
+            coeff[i] = 1;
+
+            for (int j = i - 1; j > 0; j--) {
+                coeff[j] += coeff[j - 1];
+            }
         }
 
-        binomMap.put(key, (int) result);
-        return (int) result;
+        int result = coeff[k];
+        binomMap.put(key, result);
+        return result;
     }
 }
