@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * Created by eschmar on 03/11/16.
  */
-public class IterativePascal extends ErrorPascal implements Pascal {
+public class IterativePascal extends ErrorPascal {
     public IterativePascal() {
         super();
     }
