@@ -17,7 +17,7 @@ public class BubbleSort {
 
             current = list.first;
             while (current != null && current.next != null) {
-                if (current.val > current.next.val) {
+                if (current.compareTo(current.next) == 1) {
                     swapped = true;
                     list.swap(current, current.next);
                     swaps++;
