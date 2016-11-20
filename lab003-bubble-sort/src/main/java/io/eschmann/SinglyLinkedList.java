@@ -68,6 +68,12 @@ public class SinglyLinkedList {
         next.next = current;
     }
 
+    public void swapNodeValues(Node current, Node next) {
+        int temp = current.val;
+        current.val = next.val;
+        next.val = temp;
+    }
+
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();

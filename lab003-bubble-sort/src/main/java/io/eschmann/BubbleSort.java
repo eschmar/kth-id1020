@@ -6,22 +6,25 @@ package io.eschmann;
 public class BubbleSort {
     private BubbleSort() {}
 
-    public static void sort(SinglyLinkedList list) {
-
+    public static long sort(SinglyLinkedList list) {
+        long swaps = 0;
         int R = list.length - 2;
         boolean swapped = true;
 
         while (R >= 0 && swapped == true) {
             swapped = false;
-            for (int i = 0; i < R; i++) {
+            for (int i = 0; i <= R; i++) {
                 Node current = list.get(i);
                 if (current.val > current.next.val) {
                     swapped = true;
-                    list.swapWithNextNode(i);
+                    list.swapNodeValues(current, current.next);
+                    swaps++;
                 }
             }
 
             R--;
         }
+
+        return swaps;
     }
 }
