@@ -34,6 +34,17 @@ public class SinglyLinkedList {
         last = n;
     }
 
+    public void prepend(Node n) {
+        length++;
+
+        if (first == null) {
+            last = n;
+        }
+
+        n.next = first;
+        first = n;
+    }
+
     public Node get(int i) {
         if (i >= length || i < 0) {
             throw new IndexOutOfBoundsException("Invalid index given.");
@@ -49,26 +60,7 @@ public class SinglyLinkedList {
         return wanted;
     }
 
-    public void swapWithNextNode(int i) {
-        if (i == 0) {
-            Node temp = first;
-            Node second = first.next;
-            temp.next = second.next;
-            first = second;
-            first.next = temp;
-            return;
-        }
-
-        Node previous = get(i - 1);
-        Node current = previous.next;
-        Node next = current.next;
-
-        previous.next = next;
-        current.next = next.next;
-        next.next = current;
-    }
-
-    public void swapNodeValues(Node current, Node next) {
+    public void swap(Node current, Node next) {
         int temp = current.val;
         current.val = next.val;
         next.val = temp;

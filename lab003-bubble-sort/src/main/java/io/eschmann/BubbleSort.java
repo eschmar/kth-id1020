@@ -17,7 +17,7 @@ public class BubbleSort {
                 Node current = list.get(i);
                 if (current.val > current.next.val) {
                     swapped = true;
-                    list.swapNodeValues(current, current.next);
+                    list.swap(current, current.next);
                     swaps++;
                 }
             }
