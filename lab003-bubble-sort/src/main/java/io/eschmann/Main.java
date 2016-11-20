@@ -30,7 +30,7 @@ public class Main {
         StdOut.print("Print inversions [y/n]? ");
         answer = StdIn.readString();
 
-        StdOut.println("List created:");
+        StdOut.println("\nList created:");
         StdOut.println(list);
 
         StdOut.println("\nCount inversions...");

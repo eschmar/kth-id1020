@@ -10,16 +10,20 @@ public class BubbleSort {
         long swaps = 0;
         int R = list.length - 2;
         boolean swapped = true;
+        Node current;
 
         while (R >= 0 && swapped == true) {
             swapped = false;
-            for (int i = 0; i <= R; i++) {
-                Node current = list.get(i);
+
+            current = list.first;
+            while (current != null && current.next != null) {
                 if (current.val > current.next.val) {
                     swapped = true;
                     list.swap(current, current.next);
                     swaps++;
                 }
+
+                current = current.next;
             }
 
             R--;
