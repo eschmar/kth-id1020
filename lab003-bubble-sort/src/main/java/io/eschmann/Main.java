@@ -1,5 +1,6 @@
 package io.eschmann;
 
+import edu.princeton.cs.algs4.Stopwatch;
 import edu.princeton.cs.introcs.StdIn;
 import edu.princeton.cs.introcs.StdOut;
 
@@ -43,7 +44,9 @@ public class Main {
         }
 
         StdOut.println("Sort list...");
+        Stopwatch timer = new Stopwatch();
         long swaps = BubbleSort.sort(list);
+        StdOut.println("Sorted list in " + timer.elapsedTime() + " seconds.");
 
         StdOut.println("\nList sorted:");
         StdOut.println(list);
