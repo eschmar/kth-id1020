@@ -30,6 +30,7 @@ public class Main {
 
         StdOut.println("\nList created:");
         StdOut.println(list.toString(10));
+        Inversion inv = new Inversion();
 
         //
         // BRUTE FORCE INVERSIONS
@@ -37,14 +38,14 @@ public class Main {
 
         StdOut.println("\nBrute force count inversions...");
         Stopwatch timer = new Stopwatch();
-        long inversions = Inversion.bruteForceCount(list);
+        long inversions = inv.bruteForceCount(list);
         StdOut.println(inversions + " inversions in " + timer.elapsedTime() + "s.");
 
         //
         // MERGE SORT
         //
         StdOut.println("\nMerge sort count inversions...");
-        Inversion inv = new Inversion();
+
         timer = new Stopwatch();
         inversions = inv.mergeSortCount(list);
 

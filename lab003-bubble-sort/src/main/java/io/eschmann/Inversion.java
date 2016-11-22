@@ -4,7 +4,7 @@ package io.eschmann;
  * Created by eschmar on 19/11/16.
  */
 public class Inversion {
-    public static long bruteForceCount(SinglyLinkedList list) {
+    public long bruteForceCount(SinglyLinkedList list) {
         long inversions = 0;
         Node comparator = list.first;
         Node current;
@@ -71,7 +71,7 @@ public class Inversion {
                     right = right.next;
 
                     // increase inversions if the value of the left item
-                    // is larger than theo ne of the right item.
+                    // is larger than the one of the right item.
                     inversions += (split - i);
                 }
             }
