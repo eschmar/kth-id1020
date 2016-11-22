@@ -40,6 +40,7 @@ public class Inversion {
             return list;
         }
 
+        // Recursion
         int split = (int) (list.length / 2);
         Node splitNode = list.get(split -1);
 
@@ -49,6 +50,7 @@ public class Inversion {
         SinglyLinkedList sortedA = mergeSort(a);
         SinglyLinkedList sortedB = mergeSort(b);
 
+        // Merge
         SinglyLinkedList result = new SinglyLinkedList();
         Node left = sortedA.first;
         Node right = sortedB.first;
