@@ -28,30 +28,39 @@ public class Main {
             }
         }
 
-        StdOut.print("Print inversions [y/n]? ");
-        answer = StdIn.readString();
-
         StdOut.println("\nList created:");
-        StdOut.println(list);
+        StdOut.println(list.toString(10));
 
-        StdOut.println("\nCount inversions...");
+        //
+        // BRUTE FORCE INVERSIONS
+        //
 
-        long inversions;
-        if (answer.equals("y")) {
-            inversions = Inversion.countInversionsAndPrint(list);
-        }else {
-            inversions = Inversion.countInversions(list);
-        }
-
-        StdOut.println("Sort list...");
+        StdOut.println("\nBrute force count inversions...");
         Stopwatch timer = new Stopwatch();
+        long inversions = Inversion.bruteForceCount(list);
+        StdOut.println(inversions + " inversions in " + timer.elapsedTime() + "s.");
+
+        //
+        // MERGE SORT
+        //
+        StdOut.println("\nMerge sort count inversions...");
+        Inversion inv = new Inversion();
+        timer = new Stopwatch();
+        inversions = inv.mergeSortCount(list);
+
+        StdOut.println("List sorted with " + inversions + " inversions in " + timer.elapsedTime() + "s.");
+        StdOut.println(inv.sortedList.toString(10));
+
+        //
+        // BUBBLE SORT
+        //
+        StdOut.println("\nBubble sort list...");
+        timer = new Stopwatch();
         long swaps = BubbleSort.sort(list);
         StdOut.println("Sorted list in " + timer.elapsedTime() + " seconds.");
 
-        StdOut.println("\nList sorted:");
-        StdOut.println(list);
-
-        StdOut.println("\n# Swaps: " + swaps + ", # Inversions: " + inversions);
+        StdOut.println("\nList sorted with " + swaps + " swaps:");
+        StdOut.println(list.toString(10));
     }
 
     public static int getRandom(int min, int max) {

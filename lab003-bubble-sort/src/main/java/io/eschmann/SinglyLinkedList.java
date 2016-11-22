@@ -15,6 +15,13 @@ public class SinglyLinkedList {
         }
     }
 
+    public SinglyLinkedList(Node node, int length) {
+        for (int i = 0; i < length; i++) {
+            append(new Node(node.val));
+            node = node.next;
+        }
+    }
+
     public SinglyLinkedList(int[] values) {
         for (int i = 0; i < values.length; i++) {
             append(new Node(values[i]));
@@ -71,12 +78,33 @@ public class SinglyLinkedList {
         StringBuilder output = new StringBuilder();
 
         Node temp = first;
+        int i = 0;
         while (temp.next != null) {
             output.append(temp.val + " -> ");
             temp = temp.next;
         }
 
         output.append(temp.val + " -> NULL");
+        return output.toString();
+    }
+
+    public String toString(int limit) {
+        StringBuilder output = new StringBuilder();
+
+        int i = 0;
+        Node temp = first;
+        while (temp.next != null && i < limit) {
+            output.append(temp.val + " -> ");
+            temp = temp.next;
+            i++;
+        }
+
+        if (i < limit) {
+            output.append(temp.val + " -> NULL");
+        }else {
+            output.append(temp.val + " -> ...");
+        }
+
         return output.toString();
     }
 }
