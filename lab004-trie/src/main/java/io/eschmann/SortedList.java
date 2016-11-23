@@ -3,13 +3,14 @@ package io.eschmann;
 /**
  * Created by eschmar on 23/11/16.
  */
-public class SortedList<T> {
-    Node head;
-    Node tail;
+public class SortedList {
+    Trie head;
+    Trie tail;
     int length = 0;
 
     public SortedList() {}
-    public void add(Node<? extends T> node) {
+
+    public void add(Trie node) {
         length++;
 
         if (head == null) {
@@ -19,59 +20,47 @@ public class SortedList<T> {
         }else if (node.compareTo(head) == -1) {
             node.next = head;
             head = node;
+            return;
         }
 
-        Node temp = head;
-        while (temp.next != null && node.compareTo(temp.next) < 1) {
+
+        Trie previous = head;
+        Trie temp = previous.next;
+
+        while (temp != null && node.compareTo(temp) > -1) {
+            previous = temp;
             temp = temp.next;
         }
 
-        node.next = temp.next;
-        temp.next = node;
+        node.next = temp;
+        previous.next = node;
 
         if (node.next == null) {
             tail = node;
         }
     }
 
-    public Node get(int index) {
-        Node temp = head;
-        while (temp.key != index && temp.next != null) {
+    public Trie get(int index) {
+        if (head == null) return null;
+
+        Trie temp = head;
+        while (temp.k != index && temp.next != null) {
             temp = temp.next;
         }
 
-        if (temp.key == index) {
+        if (temp.k == index) {
             return temp;
         }
 
         return null;
     }
 
-    public Node getNext(int index) {
-        Node temp = this.get(index);
+    public Trie getNext(int index) {
+        Trie temp = this.get(index);
         return temp != null ? temp.next : null;
     }
 
-    public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
-        public int key;
-        public T val;
-        public Node next;
-
-        public Node(int key, T val, Node<T> next) {
-            this.key = key;
-            this.val = val;
-            this.next = next;
-        }
-
-        public Node(int key, T val) {
-            this.key = key;
-            this.val = val;
-        }
-
-        public int compareTo(Node<T> that) {
-            if (this.val.compareTo(that.val) < 0) return -1;
-            else if (this.val == that.val) return 0;
-            else return 1;
-        }
+    public boolean containsKey(int key) {
+        return this.get(key) != null ? true : false;
     }
 }

@@ -32,6 +32,8 @@ public class Main {
             StdOut.println("value = " + trie.get(query));
             StdOut.println("count = " + trie.count(query));
             StdOut.println("distinct = " + trie.distinct(query));
+            StdOut.println("Children chars: " + trie.getSubTrie(query));
+
 
             StdOut.print("\nNew query [y/n]? ");
             String repeat = StdIn.readString();

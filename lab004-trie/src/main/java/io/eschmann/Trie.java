@@ -10,24 +10,22 @@ import java.util.Iterator;
  */
 public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
     public char k;
+    public Trie next;
     private long value;
     private long subTrieSum;
     private long subTrieDistinctSum;
     private Trie parent;
-    private HashMap<Character, Trie> children;
-
-    private SortedList<Trie> childrn;
+    private SortedList children;
 
     private final long defaultValue = 1;
 
     public Trie(char k) {
         this.k = k;
-        this.children = new HashMap<Character, Trie>();
-        this.childrn = new SortedList<Trie>();
+        this.children = new SortedList();
     }
 
     public int compareTo(Trie that) {
-        if (this.k < that.k) return -1;
+        if ((int) this.k < (int) that.k) return -1;
         else if (this.k == that.k) return 0;
         else return 1;
     }
@@ -52,13 +50,10 @@ public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
         }
 
         char k = key.charAt(0);
-
-
-
         if (!children.containsKey(k)) {
             Trie node = new Trie(k);
             node.parent = this;
-            children.put(k, node);
+            children.add(node);
         }
 
         children.get(k).put(key.substring(1), value);
@@ -121,5 +116,19 @@ public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
 
     public long getValue() {
         return this.value;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder();
+        out.append(this.k).append(" -> ");
+
+        Trie temp = this.children.head;
+        while (temp != null) {
+            out.append(temp.k).append(" ");
+            temp = temp.next;
+        }
+
+        return out.toString();
     }
 }
