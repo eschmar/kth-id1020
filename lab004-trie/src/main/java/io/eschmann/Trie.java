@@ -9,6 +9,8 @@ import java.util.Iterator;
  */
 public class Trie implements TrieInterface, Iterable {
     private long value;
+    private long subTrieSum;
+    private Trie parent;
     private HashMap<Character, Trie> children;
     private final long defaultValue = 1;
 
@@ -27,35 +29,58 @@ public class Trie implements TrieInterface, Iterable {
     public void put(String key, long value) {
         if (key.isEmpty()) {
             this.value += value;
+            this.bubbleUpSum(value);
             return;
         }
 
         char k = key.charAt(0);
         if (!children.containsKey(k)) {
             Trie node = new Trie();
+            node.parent = this;
             children.put(k, node);
         }
 
         children.get(k).put(key.substring(1), value);
     }
 
+    private void bubbleUpSum(long value) {
+        this.subTrieSum += value;
+        if (this.parent != null) {
+            this.parent.bubbleUpSum(value);
+        }
+    }
+
     public long get(String key) {
+        Trie node = this.getSubTrie(key);
+        return node == null ? 0 : node.value;
+    }
+
+    public Trie getSubTrie(String key) {
         Trie current = this;
         for (int i = 0; i < key.length(); i++) {
             if (!current.children.containsKey(key.charAt(i))) {
-                return 0;
+                return null;
             }
             current = current.children.get(key.charAt(i));
         }
 
-        return current.value;
+        return current;
     }
 
-    public long count(String key) {
-        return 0;
+    public long count() {
+        return this.subTrieSum;
+    }
+
+    public long count(String prefix) {
+        Trie node = this.getSubTrie(prefix);
+        return node.count();
     }
 
     public long distinct(String key) {
         return 0;
+    }
+
+    public long getValue() {
+        return this.value;
     }
 }

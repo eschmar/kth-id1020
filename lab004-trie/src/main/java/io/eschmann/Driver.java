@@ -15,22 +15,24 @@ public class Driver {
         boolean exit = false;
 
         Trie trie = new Trie();
-        String[] keys = {"ab", "ac", "bad", "baf", "bc"};
+        String[] keys = {"ab", "ac", "ac", "b", "bad", "baf", "baf", "baf", "bc", "bc", "bc", "bc"};
         for (String k : keys) {
             trie.put(k);
             StdOut.print(k + ", ");
         }
 
         String query;
-        long result;
+        Trie result;
         StdOut.println();
 
         while (!exit) {
             StdOut.print("\nSearch for: ");
             query = StdIn.readString();
 
-            result = trie.get(query);
-            StdOut.println("Your query \"" + query + "\" yielded: " + result);
+            result = trie.getSubTrie(query);
+            StdOut.println("Your query \"" + query + "\" yielded:");
+            StdOut.println("value = " + result.getValue());
+            StdOut.println("count = " + result.count());
 
             StdOut.print("\nNew query [y/n]? ");
             String repeat = StdIn.readString();
