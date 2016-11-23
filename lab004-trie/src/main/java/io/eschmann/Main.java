@@ -6,7 +6,7 @@ import edu.princeton.cs.introcs.StdOut;
 /**
  * Created by eschmar on 23/11/16.
  */
-public class Driver {
+public class Main {
     public static void main(String[] args) {
         StdOut.println("\nCounting Trie");
         StdOut.println("---------------");
