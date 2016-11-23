@@ -8,5 +8,5 @@ public interface TrieInterface {
     public void put(String key, long value);
     public long get(String key);
     public long count(String key);
-    public long distinct(String key);
+    public long distinct(String prefix);
 }

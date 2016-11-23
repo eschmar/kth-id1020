@@ -22,17 +22,16 @@ public class Driver {
         }
 
         String query;
-        Trie result;
         StdOut.println();
 
         while (!exit) {
             StdOut.print("\nSearch for: ");
             query = StdIn.readString();
 
-            result = trie.getSubTrie(query);
             StdOut.println("Your query \"" + query + "\" yielded:");
-            StdOut.println("value = " + result.getValue());
-            StdOut.println("count = " + result.count());
+            StdOut.println("value = " + trie.get(query));
+            StdOut.println("count = " + trie.count(query));
+            StdOut.println("distinct = " + trie.distinct(query));
 
             StdOut.print("\nNew query [y/n]? ");
             String repeat = StdIn.readString();
