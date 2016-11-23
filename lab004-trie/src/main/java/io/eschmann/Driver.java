@@ -8,15 +8,31 @@ import edu.princeton.cs.introcs.StdOut;
  */
 public class Driver {
     public static void main(String[] args) {
+        StdOut.println("\nCounting Trie");
+        StdOut.println("---------------");
+        StdOut.print("Set: ");
+
         boolean exit = false;
 
+        Trie trie = new Trie();
+        String[] keys = {"ab", "ac", "bad", "baf", "bc"};
+        for (String k : keys) {
+            trie.put(k);
+            StdOut.print(k + ", ");
+        }
+
+        String query;
+        long result;
+        StdOut.println();
+
         while (!exit) {
-            StdOut.println("\nCounting Trie");
-            StdOut.println("---------------\n");
+            StdOut.print("\nSearch for: ");
+            query = StdIn.readString();
 
-            Trie trie = new Trie();
+            result = trie.get(query);
+            StdOut.println("Your query \"" + query + "\" yielded: " + result);
 
-            StdOut.print("Repeat [y/n]? ");
+            StdOut.print("\nNew query [y/n]? ");
             String repeat = StdIn.readString();
             exit = !repeat.equals("y");
         }
