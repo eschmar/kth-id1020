@@ -1,5 +1,6 @@
 package io.eschmann;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -7,16 +8,28 @@ import java.util.Iterator;
 /**
  * Created by eschmar on 23/11/16.
  */
-public class Trie implements TrieInterface, Iterable {
+public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
+    public char k;
     private long value;
     private long subTrieSum;
     private long subTrieDistinctSum;
     private Trie parent;
     private HashMap<Character, Trie> children;
+
+    private SortedList<Trie> childrn;
+
     private final long defaultValue = 1;
 
-    public Trie() {
+    public Trie(char k) {
+        this.k = k;
         this.children = new HashMap<Character, Trie>();
+        this.childrn = new SortedList<Trie>();
+    }
+
+    public int compareTo(Trie that) {
+        if (this.k < that.k) return -1;
+        else if (this.k == that.k) return 0;
+        else return 1;
     }
 
     public Iterator iterator() {
@@ -39,8 +52,11 @@ public class Trie implements TrieInterface, Iterable {
         }
 
         char k = key.charAt(0);
+
+
+
         if (!children.containsKey(k)) {
-            Trie node = new Trie();
+            Trie node = new Trie(k);
             node.parent = this;
             children.put(k, node);
         }
@@ -68,6 +84,10 @@ public class Trie implements TrieInterface, Iterable {
     }
 
     public Trie getSubTrie(String key) {
+        // check if root is queried
+        if (key.equals("-") && this.k == '-') return this;
+
+        // traverse tree recursively to queried key
         Trie current = this;
         for (int i = 0; i < key.length(); i++) {
             if (!current.children.containsKey(key.charAt(i))) {

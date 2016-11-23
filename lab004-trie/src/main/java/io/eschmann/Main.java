@@ -14,7 +14,7 @@ public class Main {
 
         boolean exit = false;
 
-        Trie trie = new Trie();
+        Trie trie = new Trie('-');
         String[] keys = {"ab", "ac", "ac", "b", "bad", "baf", "baf", "baf", "bc", "bc", "bc", "bc"};
         for (String k : keys) {
             trie.put(k);
