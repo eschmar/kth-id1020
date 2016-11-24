@@ -3,6 +3,9 @@ package io.eschmann;
 import edu.princeton.cs.introcs.StdIn;
 import edu.princeton.cs.introcs.StdOut;
 
+import java.util.Iterator;
+import java.util.Map;
+
 /**
  * Created by eschmar on 23/11/16.
  */
@@ -34,6 +37,14 @@ public class Main {
             StdOut.println("distinct = " + trie.distinct(query));
             StdOut.println("Children chars: " + trie.getSubTrie(query));
 
+            StdOut.println("Keys found:");
+            Iterator iterator = trie.iterator(query);
+            TrieIterator.Word word;
+
+            while (iterator.hasNext()) {
+                word = (TrieIterator.Word) iterator.next();
+                StdOut.println(word);
+            }
 
             StdOut.print("\nNew query [y/n]? ");
             String repeat = StdIn.readString();

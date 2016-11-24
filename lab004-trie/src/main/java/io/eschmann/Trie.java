@@ -1,9 +1,6 @@
 package io.eschmann;
 
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
-
 
 /**
  * Created by eschmar on 23/11/16.
@@ -11,13 +8,13 @@ import java.util.Iterator;
 public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
     public char k;
     public Trie next;
-    private long value;
-    private long subTrieSum;
-    private long subTrieDistinctSum;
-    private Trie parent;
-    private SortedList children;
+    public int value;
+    private int subTrieSum;
+    private int subTrieDistinctSum;
+    public Trie parent;
+    public SortedList children;
 
-    private final long defaultValue = 1;
+    private final int defaultValue = 1;
 
     public Trie(char k) {
         this.k = k;
@@ -30,15 +27,11 @@ public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
         else return 1;
     }
 
-    public Iterator iterator() {
-        return null;
-    }
-
     public void put(String key) {
         this.put(key, defaultValue);
     }
 
-    public void put(String key, long value) {
+    public void put(String key, int value) {
         if (key.isEmpty()) {
             if (this.value == 0) {
                 this.bubbleUpDistinct();
@@ -73,7 +66,7 @@ public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
         }
     }
 
-    public long get(String key) {
+    public int get(String key) {
         Trie node = this.getSubTrie(key);
         return node == null ? 0 : node.value;
     }
@@ -94,27 +87,27 @@ public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
         return current;
     }
 
-    public long count() {
+    public int count() {
         return this.subTrieSum;
     }
 
-    public long count(String prefix) {
+    public int count(String prefix) {
         Trie node = this.getSubTrie(prefix);
         if (node == null) return 0;
         return node.count();
     }
 
-    public long distinct(String prefix) {
+    public int distinct(String prefix) {
         Trie node = this.getSubTrie(prefix);
         if (node == null) return 0;
         return node.distinct();
     }
 
-    public long distinct() {
+    public int distinct() {
         return this.subTrieDistinctSum;
     }
 
-    public long getValue() {
+    public int getValue() {
         return this.value;
     }
 
@@ -130,5 +123,12 @@ public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
         }
 
         return out.toString();
+    }
+
+    public Iterator iterator() {
+        return this.iterator("-");
+    }
+    public Iterator iterator(String prefix) {
+        return new TrieIterator(this.getSubTrie(prefix));
     }
 }

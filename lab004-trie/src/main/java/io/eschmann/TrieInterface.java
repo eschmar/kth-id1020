@@ -5,8 +5,8 @@ package io.eschmann;
  */
 public interface TrieInterface {
     public void put(String key);
-    public void put(String key, long value);
-    public long get(String key);
-    public long count(String key);
-    public long distinct(String prefix);
+    public void put(String key, int value);
+    public int get(String key);
+    public int count(String key);
+    public int distinct(String prefix);
 }
