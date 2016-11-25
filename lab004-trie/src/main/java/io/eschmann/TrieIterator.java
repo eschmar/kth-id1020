@@ -45,11 +45,9 @@ public class TrieIterator implements Iterator<Map.Entry<String, Integer>> {
     }
 
     public Map.Entry<String, Integer> next() {
+        Trie temp = findNext();
         previous = current;
-        current = findNext();
-
-//        if (previous != null) System.out.println("p: " + previous);
-//        if (current != null) System.out.println("c: " + current);
+        current = temp;
         return new Word(this.extractKey(current), current.value);
     }
 
