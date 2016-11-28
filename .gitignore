@@ -67,6 +67,8 @@ buildNumber.properties
 ## Directory-based project format:
 .idea/
 
+## Resources
+/lab004-trie/src/main/resources
 
 ### TESTING ###
 src/io/eschmann/*

@@ -11,6 +11,7 @@ public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
     public int value;
     private int subTrieSum;
     private int subTrieDistinctSum;
+    private int subTrieHighestValue;
     public Trie parent;
     public SortedList children;
 
@@ -97,6 +98,21 @@ public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
         return node.count();
     }
 
+    public Trie getHighestCountChild() {
+        Trie highest = this.children.head;
+        Trie current = this.children.head;
+
+        while (current != null) {
+            if (current.count() > highest.count()) {
+                highest = current;
+            }
+
+            current = current.next;
+        }
+
+        return highest;
+    }
+
     public int distinct(String prefix) {
         Trie node = this.getSubTrie(prefix);
         if (node == null) return 0;
@@ -105,6 +121,21 @@ public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
 
     public int distinct() {
         return this.subTrieDistinctSum;
+    }
+
+    public Trie getMostDistinctChild() {
+        Trie mostDistinct = this.children.head;
+        Trie current = this.children.head;
+
+        while (current != null) {
+            if (current.distinct() > mostDistinct.distinct()) {
+                mostDistinct = current;
+            }
+
+            current = current.next;
+        }
+
+        return mostDistinct;
     }
 
     public int getValue() {

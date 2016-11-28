@@ -60,7 +60,7 @@ public class TrieIterator implements Iterator<Map.Entry<String, Integer>> {
         return out.toString();
     }
 
-    public class Word implements Map.Entry<String, Integer> {
+    public class Word implements Map.Entry<String, Integer>, Comparable<Word> {
         String key;
         Integer value;
 
@@ -93,6 +93,12 @@ public class TrieIterator implements Iterator<Map.Entry<String, Integer>> {
         @Override
         public String toString() {
             return "[" + key + "," + value + "]";
+        }
+
+        public int compareTo(Word that) {
+            if ((int) this.value < (int) that.value) return -1;
+            else if (this.value == that.value) return 0;
+            else return 1;
         }
     }
 }
