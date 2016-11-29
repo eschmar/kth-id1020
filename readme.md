@@ -6,4 +6,4 @@
 - [x] Lab 004
 - [ ] Lab 005
 
-* entirely theoretical and therefor not included in this repository.
+\* entirely theoretical and therefor not included in this repository.
