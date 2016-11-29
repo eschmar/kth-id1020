@@ -11,7 +11,6 @@ public class Trie implements TrieInterface, Iterable, Comparable<Trie> {
     public int value;
     private int subTrieSum;
     private int subTrieDistinctSum;
-    private int subTrieHighestValue;
     public Trie parent;
     public SortedList children;
 
