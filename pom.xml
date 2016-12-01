@@ -10,6 +10,7 @@
         <module>lab001-api-design</module>
         <module>lab003-bubble-sort</module>
         <module>lab004-trie</module>
+        <module>project001</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>kth-id1020</artifactId>
