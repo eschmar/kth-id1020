@@ -50,11 +50,11 @@ public class IndexNode implements Comparable<IndexNode> {
         }
 
         DocumentWrapper item = this.docs.get(pos);
-        if (attr.occurrence < item.firstOccurence) {
-            item.firstOccurence = attr.occurrence;
+        if (attr.occurrence < item.firstOccurrence) {
+            item.firstOccurrence = attr.occurrence;
         }
 
-        item.hits++;
+        item.occurrences++;
     }
 
     @Override

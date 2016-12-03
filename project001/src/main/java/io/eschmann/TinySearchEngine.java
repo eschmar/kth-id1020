@@ -5,8 +5,10 @@ import se.kth.id1020.util.Attributes;
 import se.kth.id1020.util.Document;
 import se.kth.id1020.util.Word;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -20,8 +22,8 @@ public class TinySearchEngine implements TinySearchEngineBase {
     public static final String SORT_OCCURRENCE_TERM = "occurrence";
     public static final String SORT_POPULARITY_TERM = "popularity";
 
-    public static final int ORDER_ASC = 0;
-    public static final int ORDER_DESC = 1;
+    public static final int ORDER_ASC = 1;
+    public static final int ORDER_DESC = -1;
 
     private static final int TOGGLE_OUTPUT = 1;
 
@@ -64,9 +66,29 @@ public class TinySearchEngine implements TinySearchEngineBase {
             }
         }
 
-        // sort result
-        // todo
+        if (TOGGLE_OUTPUT == 1) {
+            System.out.println("\n<debug>");
+            printArrayList(result);
+        }
 
+        // sort result
+        Comparator comparator;
+        if (this.sortStrategy == SORT_OCCURRENCE) {
+            comparator = new OccurrenceComparator(this.orderStrategy);
+        } else if (this.sortStrategy == SORT_POPULARITY) {
+            comparator = new PopularityComparator(this.orderStrategy);
+        } else {
+            comparator = new CountComparator(this.orderStrategy);
+        }
+
+        BubbleSort bubble = new BubbleSort(comparator);
+        bubble.sort(result);
+
+        if (TOGGLE_OUTPUT == 1) {
+            System.out.println("post sort:");
+            printArrayList(result);
+            System.out.println("</debug>\n");
+        }
 
         // convert for output
         List<Document> output = new ArrayList<Document>();
@@ -75,6 +97,12 @@ public class TinySearchEngine implements TinySearchEngineBase {
         }
 
         return output;
+    }
+
+    private void printArrayList(List list) {
+        for (Object o : list) {
+            System.out.println(o);
+        }
     }
 
     private String getParsedQueryVisualisation(String[] terms) {
