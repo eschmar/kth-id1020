@@ -1,8 +1,6 @@
 package io.eschmann;
 
-import com.sun.tools.doclint.HtmlTag;
 import se.kth.id1020.util.Attributes;
-import se.kth.id1020.util.Document;
 import se.kth.id1020.util.Word;
 
 import java.util.ArrayList;
@@ -10,12 +8,13 @@ import java.util.ArrayList;
 /**
  * Created by eschmar on 01/12/16.
  */
-public class Node implements Comparable<Node> {
-    public Word word;
+public class IndexNode implements Comparable<IndexNode> {
+    public String word;
     public ArrayList<Attributes> attributes;
+    public int count;
 
-    public int compareTo(Node o) {
-        return word.word.compareTo(o.word.word);
+    public int compareTo(IndexNode o) {
+        return word.compareTo(o.word);
     }
 
     @Override
@@ -29,14 +28,25 @@ public class Node implements Comparable<Node> {
 
     @Override
     public int hashCode() {
-        int result = word.word.hashCode();
+        int result = word.hashCode();
         return result;
     }
 
-    public Node(Word word, Attributes attr) {
+    public IndexNode(String word, Attributes attr) {
         this.word = word;
         this.attributes = new ArrayList<Attributes>();
         if (attr == null) return;
         this.attributes.add(attr);
+        count++;
+    }
+
+    public void addAttribute(Attributes attr) {
+        this.attributes.add(attr);
+        count++;
+    }
+
+    @Override
+    public String toString() {
+        return this.word + " (" + this.count + ")";
     }
 }
