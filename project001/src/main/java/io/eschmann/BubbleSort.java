@@ -1,6 +1,5 @@
 package io.eschmann;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -8,7 +7,6 @@ import java.util.List;
  * Created by eschmar on 03/12/16.
  */
 public class BubbleSort {
-
     Comparator comparator;
 
     public BubbleSort(Comparator comparator) {

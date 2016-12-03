@@ -5,7 +5,6 @@ import se.kth.id1020.util.Attributes;
 import se.kth.id1020.util.Document;
 import se.kth.id1020.util.Word;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
