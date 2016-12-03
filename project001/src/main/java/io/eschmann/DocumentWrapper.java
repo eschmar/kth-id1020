@@ -5,7 +5,7 @@ import se.kth.id1020.util.Document;
 /**
  * Created by eschmar on 03/12/16.
  */
-public class DocumentWrapper implements Comparable<Document> {
+public class DocumentWrapper implements Comparable<DocumentWrapper> {
     Document doc;
     int firstOccurrence;
     int occurrences;
@@ -16,8 +16,8 @@ public class DocumentWrapper implements Comparable<Document> {
         this.occurrences = 1;
     }
 
-    public int compareTo(Document o) {
-        return this.doc.name.compareTo(o.name);
+    public int compareTo(DocumentWrapper o) {
+        return this.doc.name.compareTo(o.doc.name);
     }
 
     @Override

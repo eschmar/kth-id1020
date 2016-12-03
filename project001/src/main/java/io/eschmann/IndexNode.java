@@ -42,10 +42,11 @@ public class IndexNode implements Comparable<IndexNode> {
 
     public void addDocument(Attributes attr) {
         count++;
-        int pos = Collections.binarySearch(this.docs, attr.document);
+        DocumentWrapper temp = new DocumentWrapper(attr.document, attr.occurrence);
+        int pos = Collections.binarySearch(this.docs, temp);
 
         if (pos < 0) {
-            this.docs.add(-pos-1, new DocumentWrapper(attr.document, attr.occurrence));
+            this.docs.add(-pos-1, temp);
             return;
         }
 

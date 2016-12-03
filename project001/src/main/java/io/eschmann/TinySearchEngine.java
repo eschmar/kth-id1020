@@ -25,11 +25,11 @@ public class TinySearchEngine implements TinySearchEngineBase {
     public static final int ORDER_ASC = 1;
     public static final int ORDER_DESC = -1;
 
-    private static final int TOGGLE_OUTPUT = 1;
+    private static final int TOGGLE_OUTPUT = 0;
 
     ArrayList<IndexNode> index;
     int sortStrategy = SORT_COUNT;
-    int orderStrategy = ORDER_ASC;
+    int orderStrategy = ORDER_DESC;
 
     public TinySearchEngine() {
         this.index = new ArrayList<IndexNode>();
@@ -49,7 +49,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
     public List<Document> search(String s) {
         String[] terms = parseQuery(s);
-        System.out.println(this.getParsedQueryVisualisation(terms));
+        System.out.println("\n# " + this.getParsedQueryVisualisation(terms) + "\n");
         List<DocumentWrapper> result = new ArrayList<DocumentWrapper>();
 
         // execute search for each query term
@@ -60,9 +60,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
             if (pos < 0) continue;
 
             for (DocumentWrapper doc : this.index.get(pos).docs) {
-                if (!result.contains(doc)) {
-                    result.add(doc);
-                }
+                union(result, doc);
             }
         }
 
@@ -97,6 +95,20 @@ public class TinySearchEngine implements TinySearchEngineBase {
         }
 
         return output;
+    }
+
+    private void union(List list, DocumentWrapper wrapper) {
+        int pos = Collections.binarySearch(list, wrapper);
+        if (pos < 0) {
+            list.add(-pos-1, wrapper);
+            return;
+        }
+
+        DocumentWrapper temp = (DocumentWrapper) list.get(pos);
+        temp.occurrences += wrapper.occurrences;
+        if (wrapper.firstOccurrence < temp.firstOccurrence) {
+            temp.firstOccurrence = wrapper.firstOccurrence;
+        }
     }
 
     private void printArrayList(List list) {
