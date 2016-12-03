@@ -36,30 +36,42 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
         if (pos < 0) {
             this.index.add(-pos-1, node);
-        }else {
-            this.index.get(pos).addAttribute(attributes);
+            return;
         }
+
+        this.index.get(pos).addDocument(attributes);
     }
 
     public List<Document> search(String s) {
-        List<Document> result = new ArrayList<Document>();
         String[] terms = parseQuery(s);
+        System.out.println(this.getParsedQueryVisualisation(terms));
+        List<DocumentWrapper> result = new ArrayList<DocumentWrapper>();
 
+        // execute search for each query term
         for (String query : terms) {
             IndexNode node = new IndexNode(query, null);
             int pos = Collections.binarySearch(this.index, node);
 
             if (pos < 0) continue;
 
-            for (Attributes attr : this.index.get(pos).attributes) {
-                if (!result.contains(attr.document)) {
-                    result.add(attr.document);
+            for (DocumentWrapper doc : this.index.get(pos).docs) {
+                if (!result.contains(doc)) {
+                    result.add(doc);
                 }
             }
         }
 
-        System.out.println(this.getParsedQueryVisualisation(terms));
-        return result;
+        // sort result
+        // todo
+
+
+        // convert for output
+        List<Document> output = new ArrayList<Document>();
+        for (DocumentWrapper wrapper : result) {
+            output.add(wrapper.doc);
+        }
+
+        return output;
     }
 
     private String getParsedQueryVisualisation(String[] terms) {
