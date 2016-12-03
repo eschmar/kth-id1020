@@ -14,8 +14,11 @@ import java.util.List;
  */
 public class TinySearchEngine implements TinySearchEngineBase {
     public static final int SORT_COUNT = 0;
-    public static final int SORT_OCCURENCE = 1;
+    public static final int SORT_OCCURRENCE = 1;
     public static final int SORT_POPULARITY = 2;
+    public static final String SORT_COUNT_TERM = "count";
+    public static final String SORT_OCCURRENCE_TERM = "occurrence";
+    public static final String SORT_POPULARITY_TERM = "popularity";
 
     public static final int ORDER_ASC = 0;
     public static final int ORDER_DESC = 1;
@@ -88,13 +91,13 @@ public class TinySearchEngine implements TinySearchEngineBase {
     }
 
     private String getSortingStrategy(int strategy) {
-        if (strategy == SORT_OCCURENCE) {
-            return "occurence";
+        if (strategy == SORT_OCCURRENCE) {
+            return SORT_OCCURRENCE_TERM;
         }else if (strategy == SORT_POPULARITY) {
-            return "popularity";
+            return SORT_POPULARITY_TERM;
         }
 
-        return "count";
+        return SORT_COUNT_TERM;
     }
 
     private String getOrderStrategy(int strategy) {
@@ -112,11 +115,11 @@ public class TinySearchEngine implements TinySearchEngineBase {
         String[] result = parts[0].split(" ");
         if (parts.length < 2) return result;
 
-        if (parts[1].contains("count")) {
+        if (parts[1].contains(SORT_COUNT_TERM)) {
             this.sortStrategy = SORT_COUNT;
-        } else if (parts[1].contains("occurence")) {
-            this.sortStrategy = SORT_OCCURENCE;
-        }else if (parts[1].contains("popularity")) {
+        } else if (parts[1].contains(SORT_OCCURRENCE_TERM)) {
+            this.sortStrategy = SORT_OCCURRENCE;
+        }else if (parts[1].contains(SORT_POPULARITY_TERM)) {
             this.sortStrategy = SORT_POPULARITY;
         }
 
