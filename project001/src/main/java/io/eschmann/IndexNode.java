@@ -4,7 +4,6 @@ import se.kth.id1020.util.Attributes;
 import se.kth.id1020.util.Word;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by eschmar on 01/12/16.
@@ -43,7 +42,8 @@ public class IndexNode implements Comparable<IndexNode> {
     public void addDocument(Attributes attr) {
         count++;
         DocumentWrapper temp = new DocumentWrapper(attr.document, attr.occurrence);
-        int pos = Collections.binarySearch(this.docs, temp);
+        BinarySearch<DocumentWrapper> bs = new BinarySearch<DocumentWrapper>();
+        int pos = bs.search(temp, this.docs);
 
         if (pos < 0) {
             this.docs.add(-pos-1, temp);

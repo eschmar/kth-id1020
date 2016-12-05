@@ -6,7 +6,6 @@ import se.kth.id1020.util.Document;
 import se.kth.id1020.util.Word;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -36,7 +35,8 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
     public void insert(Word word, Attributes attributes) {
         IndexNode node = new IndexNode(word.word, attributes);
-        int pos = Collections.binarySearch(this.index, node);
+        BinarySearch<IndexNode> bs = new BinarySearch<IndexNode>();
+        int pos = bs.search(node, this.index);
 
         if (pos < 0) {
             this.index.add(-pos-1, node);
@@ -49,12 +49,13 @@ public class TinySearchEngine implements TinySearchEngineBase {
     public List<Document> search(String s) {
         String[] terms = parseQuery(s);
         System.out.println("\n# " + this.getParsedQueryVisualisation(terms) + "\n");
-        List<DocumentWrapper> result = new ArrayList<DocumentWrapper>();
+        ArrayList<DocumentWrapper> result = new ArrayList<DocumentWrapper>();
+        BinarySearch<IndexNode> bs = new BinarySearch<IndexNode>();
 
         // execute search for each query term
         for (String query : terms) {
             IndexNode node = new IndexNode(query, null);
-            int pos = Collections.binarySearch(this.index, node);
+            int pos = bs.search(node, this.index);
 
             if (pos < 0) continue;
 
@@ -96,8 +97,9 @@ public class TinySearchEngine implements TinySearchEngineBase {
         return output;
     }
 
-    private void union(List list, DocumentWrapper wrapper) {
-        int pos = Collections.binarySearch(list, wrapper);
+    private void union(ArrayList list, DocumentWrapper wrapper) {
+        BinarySearch<DocumentWrapper> bs = new BinarySearch<DocumentWrapper>();
+        int pos = bs.search(wrapper, list);
         if (pos < 0) {
             list.add(-pos-1, wrapper);
             return;
