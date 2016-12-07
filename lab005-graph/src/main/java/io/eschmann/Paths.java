@@ -19,19 +19,13 @@ public class Paths {
         println("");
         println("This graph has " + g.numberOfVertices() + " vertices and " + g.numberOfEdges() + " edges.");
         print("Calculating... ");
-        int degreeSum = getSumOfDegrees(g);
-        print("done. \n\n");
 
-        int numberOfEdges = (int) (degreeSum / 2);
-        println("The sum of degrees of all vertices connected to " + g.vertex(0) + " is " + degreeSum + ".");
-        println(degreeSum + " / 2 = " + numberOfEdges);
+        int count = getSubgraphCount(g);
 
-        if (g.numberOfEdges() > (degreeSum / 2)) {
-            println(g.numberOfEdges() + " > " + numberOfEdges + " --> graph is NOT connected.");
-        }else if (g.numberOfEdges() == (degreeSum / 2)) {
-            println(g.numberOfEdges() + " == " + numberOfEdges + " --> graph IS connected.");
+        if (count == 1) {
+            println("graph is fully connected.");
         }else {
-            println("Oops, something went wrong!");
+            println(count + " components found.");
         }
 
         // 3.2 - Shortest Path
@@ -46,30 +40,39 @@ public class Paths {
         System.out.println(s);
     }
 
-    public static int getSumOfDegrees(Graph g) {
+    public static int getSubgraphCount(Graph g) {
         Queue<Integer> vertexQueue = new Queue<Integer>();
         BinarySearch<Integer> bs = new BinarySearch<Integer>();
-
         ArrayList<Integer> visited = new ArrayList<Integer>();
-        vertexQueue.enqueue(g.vertex(0).id);
-        int degreeCount = 0;
 
-        while (vertexQueue.size() > 0) {
-            int id = vertexQueue.dequeue();
+        int pos;
+        int result = 0;
 
-            int pos = bs.search(id, visited);
+        for (Vertex v : g.vertices()) {
+            pos = bs.search(v.id, visited);
             if (pos >= 0) {
                 continue;
             }
 
-            visited.add(-pos-1, id);
+            vertexQueue.enqueue(v.id);
+            while (vertexQueue.size() > 0) {
+                int id = vertexQueue.dequeue();
 
-            for (Edge e : g.adj(id)) {
-                degreeCount++;
-                vertexQueue.enqueue(e.to);
+                pos = bs.search(id, visited);
+                if (pos >= 0) {
+                    continue;
+                }
+
+                visited.add(-pos-1, id);
+
+                for (Edge e : g.adj(id)) {
+                    vertexQueue.enqueue(e.to);
+                }
             }
+
+            result++;
         }
 
-        return degreeCount;
+        return result;
     }
 }
