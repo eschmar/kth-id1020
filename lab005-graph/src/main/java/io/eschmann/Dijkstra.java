@@ -55,6 +55,8 @@ public class Dijkstra {
                 if (alt < distance[e.to]) {
                     distance[e.to] = alt;
                     previous[e.to] = e;
+
+                    if (queue.contains(g.vertex(e.to))) continue;
                     queue.add(g.vertex(e.to));
                 }
             }
@@ -78,6 +80,15 @@ public class Dijkstra {
 
     public double getWeight(int id) {
         return this.distance[id];
+    }
+
+    public double countWeight(Stack<Edge> path) {
+        double weight = 0;
+        for (Edge current : path) {
+            weight += this.isWeighted ? current.weight : 1;
+        }
+
+        return weight;
     }
 
     public void printPath(Stack<Edge> path) {

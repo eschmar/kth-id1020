@@ -32,6 +32,7 @@ public class Paths {
         }
 
         // 3.2 - Shortest Path
+        println("\n");
         Vertex from = findVertexByLabel(g, "Renyn");
         Vertex to = findVertexByLabel(g, "Parses");
 
@@ -43,7 +44,7 @@ public class Paths {
     }
 
     public static void runDijkstra(Dijkstra dij, Vertex from, Vertex to) {
-        println("Shortest path from " + from + " to " + to + ":");
+        println("Shortest path " + (dij.isWeighted ? "WITH" : "WITHOUT") + " WEIGHTS from " + from + " to " + to + ":");
         Stack<Edge> path = dij.findPath(from, to);
         dij.printPath(path);
         println("\nWeight: " + dij.getWeight(to.id) + "\n");
