@@ -92,15 +92,12 @@ public class Dijkstra {
     }
 
     public void printPath(Stack<Edge> path) {
-        int i = 1;
+        int i = 0;
         StringBuilder out = new StringBuilder();
-
-        System.out.print("Path: ");
 
         for (Edge current : path) {
             out.insert(0, " -> " + g.vertex(current.to));
-            i++;
-            if (i % LINE_BREAK_AFTER == 0) out.insert(0, "\n");
+            if (++i % LINE_BREAK_AFTER == 0) out.insert(0, "\n");
         }
 
         out.insert(0, g.vertex(path.lastElement().from));
