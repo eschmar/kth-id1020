@@ -5,7 +5,6 @@
     <groupId>io.eschmann</groupId>
     <packaging>pom</packaging>
     <modules>
-        <module>lab001</module>
         <module>lab001-recursion</module>
         <module>lab001-api-design</module>
         <module>lab003-bubble-sort</module>

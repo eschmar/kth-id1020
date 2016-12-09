@@ -9,6 +9,9 @@ import se.kth.id1020.DataSource;
 import se.kth.id1020.Vertex;
 
 import java.util.ArrayList;
+import java.util.Stack;
+
+import edu.princeton.cs.algs4.Queue;
 
 public class Paths {
     public static void main(String[] args) {
@@ -29,7 +32,21 @@ public class Paths {
         }
 
         // 3.2 - Shortest Path
-        // todo
+        Vertex from = findVertexByLabel(g, "Renyn");
+        Vertex to = findVertexByLabel(g, "Parses");
+
+        Dijkstra regular = new Dijkstra(g);
+        Dijkstra weighted = new Dijkstra(g, true);
+
+        runDijkstra(regular, from, to);
+        runDijkstra(weighted, from, to);
+    }
+
+    public static void runDijkstra(Dijkstra dij, Vertex from, Vertex to) {
+        println("Shortest path from " + from + " to " + to + ":");
+        Stack<Edge> path = dij.findPath(from, to);
+        dij.printPath(path);
+        println("\nWeight: " + dij.getWeight(to.id) + "\n");
     }
 
     public static void print(String s) {
@@ -75,4 +92,22 @@ public class Paths {
 
         return result;
     }
+
+    public static Vertex findVertexByLabel(Graph g, String label) {
+        Vertex result = null;
+        for (Vertex v : g.vertices()) {
+            if (v.label.equals(label)) {
+                result = v;
+                break;
+            }
+        }
+
+        if (result == null) {
+            throw new IllegalArgumentException("Could not find a vertex with label \"" + label + "\" within the graph.");
+        }
+
+        return result;
+    }
 }
+
+
