@@ -56,7 +56,10 @@ public class Dijkstra {
                     distance[e.to] = alt;
                     previous[e.to] = e;
 
-                    if (queue.contains(g.vertex(e.to))) continue;
+                    if (queue.contains(g.vertex(e.to))) {
+                        queue.remove(g.vertex(e.to));
+                    }
+
                     queue.add(g.vertex(e.to));
                 }
             }

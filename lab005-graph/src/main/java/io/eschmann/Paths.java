@@ -23,7 +23,8 @@ public class Paths {
         println("This graph has " + g.numberOfVertices() + " vertices and " + g.numberOfEdges() + " edges.");
         print("Calculating... ");
 
-        int count = getSubgraphCount(g);
+        DepthFirstSearch search = new DepthFirstSearch(g);
+        int count = search.getComponentCount();
 
         if (count == 1) {
             println("graph is fully connected.");
@@ -56,42 +57,6 @@ public class Paths {
 
     public static void println(String s) {
         System.out.println(s);
-    }
-
-    public static int getSubgraphCount(Graph g) {
-        Queue<Integer> vertexQueue = new Queue<Integer>();
-        BinarySearch<Integer> bs = new BinarySearch<Integer>();
-        ArrayList<Integer> visited = new ArrayList<Integer>();
-
-        int pos;
-        int result = 0;
-
-        for (Vertex v : g.vertices()) {
-            pos = bs.search(v.id, visited);
-            if (pos >= 0) {
-                continue;
-            }
-
-            vertexQueue.enqueue(v.id);
-            while (vertexQueue.size() > 0) {
-                int id = vertexQueue.dequeue();
-
-                pos = bs.search(id, visited);
-                if (pos >= 0) {
-                    continue;
-                }
-
-                visited.add(-pos-1, id);
-
-                for (Edge e : g.adj(id)) {
-                    vertexQueue.enqueue(e.to);
-                }
-            }
-
-            result++;
-        }
-
-        return result;
     }
 
     public static Vertex findVertexByLabel(Graph g, String label) {
