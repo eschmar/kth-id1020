@@ -4,8 +4,7 @@
 - [x] Lab 002*
 - [x] Lab 003
 - [x] Lab 004
-- [ ] Lab 005
-- [x] Project 001
-- [ ] Project 002
+- [x] Lab 005
+- [ ] Project
 
 \* entirely theoretical and therefor not included in this repository.

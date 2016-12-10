@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>kth-id1020-project001</artifactId>
+    <artifactId>kth-id1020-project-tiny-search-engine</artifactId>
 
     <dependencies>
         <dependency>
