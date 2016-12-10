@@ -3,17 +3,13 @@ package io.eschmann;
 /**
  * Created by eschmar on 05/12/16.
  */
-import edu.princeton.cs.introcs.StdIn;
 import edu.princeton.cs.introcs.StdOut;
 import se.kth.id1020.Edge;
 import se.kth.id1020.Graph;
 import se.kth.id1020.DataSource;
 import se.kth.id1020.Vertex;
 
-import java.util.ArrayList;
 import java.util.Stack;
-
-import edu.princeton.cs.algs4.Queue;
 
 public class Paths {
     public static void main(String[] args) {
