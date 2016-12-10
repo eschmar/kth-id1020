@@ -3,6 +3,8 @@ package io.eschmann;
 /**
  * Created by eschmar on 05/12/16.
  */
+import edu.princeton.cs.introcs.StdIn;
+import edu.princeton.cs.introcs.StdOut;
 import se.kth.id1020.Edge;
 import se.kth.id1020.Graph;
 import se.kth.id1020.DataSource;
@@ -16,24 +18,25 @@ import edu.princeton.cs.algs4.Queue;
 public class Paths {
     public static void main(String[] args) {
         Graph g = DataSource.load();
-        // work on g
 
         // 3.1 - Connected Graph
-        println("");
-        println("This graph has " + g.numberOfVertices() + " vertices and " + g.numberOfEdges() + " edges.");
-        print("Calculating... ");
+        StdOut.println("");
+        StdOut.println("This graph has " + g.numberOfVertices() + " vertices and " + g.numberOfEdges() + " edges.");
+        StdOut.print("Calculating... ");
 
         DepthFirstSearch search = new DepthFirstSearch(g);
         int count = search.getComponentCount();
 
         if (count == 1) {
-            println("graph is fully connected.");
+            StdOut.println("graph is fully connected.");
+        }else if (count > 1){
+            StdOut.println(count + " components found.");
         }else {
-            println(count + " components found.");
+            StdOut.println("Whoops - something went wrong. (" + count + ") is not a valid result.");
         }
 
         // 3.2 - Shortest Path
-        println("\n");
+        StdOut.println("\n");
         Vertex from = findVertexByLabel(g, "Renyn");
         Vertex to = findVertexByLabel(g, "Parses");
 
@@ -45,18 +48,10 @@ public class Paths {
     }
 
     public static void runDijkstra(Dijkstra dij, Vertex from, Vertex to) {
-        println("Shortest path " + (dij.isWeighted ? "WITH" : "WITHOUT") + " WEIGHTS from " + from + " to " + to + ":");
+        StdOut.println("Shortest path " + (dij.isWeighted ? "WITH" : "WITHOUT") + " WEIGHTS from " + from + " to " + to + ":");
         Stack<Edge> path = dij.findPath(from, to);
         dij.printPath(path);
-        println("\nWeight: " + dij.getWeight(to.id) + "\n");
-    }
-
-    public static void print(String s) {
-        System.out.print(s);
-    }
-
-    public static void println(String s) {
-        System.out.println(s);
+        StdOut.println("\nWeight: " + dij.getWeight(to.id) + "\n");
     }
 
     public static Vertex findVertexByLabel(Graph g, String label) {
