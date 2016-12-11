@@ -12,10 +12,10 @@ import java.util.*;
  * Created by eschmar on 01/12/16.
  */
 public class TinySearchEngine implements TinySearchEngineBase {
-    public static final int SORT_COUNT = 0;
+    public static final int SORT_RELEVANCE = 0;
     public static final int SORT_OCCURRENCE = 1;
     public static final int SORT_POPULARITY = 2;
-    public static final String SORT_COUNT_TERM = "count";
+    public static final String SORT_RELEVANCE_TERM = "relevance";
     public static final String SORT_OCCURRENCE_TERM = "occurrence";
     public static final String SORT_POPULARITY_TERM = "popularity";
 
@@ -25,15 +25,17 @@ public class TinySearchEngine implements TinySearchEngineBase {
     private StringBuilder log;
     private static final int TOGGLE_OUTPUT = 1;
 
-    int sortStrategy = SORT_COUNT;
+    int sortStrategy = SORT_RELEVANCE;
     int orderStrategy = ORDER_DESC;
 
     HashMap<String, IndexNode> dictionary;
+    HashMap<String, Integer> documentWordCount;
     HashMap<String, ArrayList<DocumentWrapper>> cache;
     Query query;
 
     public TinySearchEngine() {
         this.dictionary = new HashMap<String, IndexNode>();
+        this.documentWordCount = new HashMap<String, Integer>();
         this.cache = new HashMap<String, ArrayList<DocumentWrapper>>();
         this.log = new StringBuilder();
     }
@@ -47,7 +49,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
     }
 
     public void preInserts() {
-        System.out.println("preInserts");
+        System.out.println("...pre inserts");
     }
 
     public void insert(Sentence sentence, Attributes attributes) {
@@ -62,10 +64,18 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
             current.addDocument(attributes);
         }
+
+        // keep track of word count per document
+        Integer wordCount = sentence.getWords().size();
+        if (this.documentWordCount.containsKey(attributes.document.name)) {
+            wordCount += this.documentWordCount.get(attributes.document.name);
+        }
+
+        this.documentWordCount.put(attributes.document.name, wordCount);
     }
 
     public void postInserts() {
-        System.out.println("postInserts");
+        System.out.println("...post inserts");
     }
 
     public List<Document> search(String s) {
@@ -86,7 +96,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
         } else if (this.sortStrategy == SORT_POPULARITY) {
             comparator = new PopularityComparator(this.orderStrategy);
         } else {
-            comparator = new CountComparator(this.orderStrategy);
+            comparator = new RelevanceComparator(this.orderStrategy, this.documentWordCount, result.size());
         }
 
         Collections.sort(result, comparator);
@@ -168,7 +178,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
             return SORT_POPULARITY_TERM;
         }
 
-        return SORT_COUNT_TERM;
+        return SORT_RELEVANCE_TERM;
     }
 
     private String getOrderStrategy(int strategy) {
@@ -221,8 +231,8 @@ public class TinySearchEngine implements TinySearchEngineBase {
             this.orderStrategy = ORDER_ASC;
         }
 
-        if (parts[1].contains(SORT_COUNT_TERM)) {
-            this.sortStrategy = SORT_COUNT;
+        if (parts[1].contains(SORT_RELEVANCE_TERM)) {
+            this.sortStrategy = SORT_RELEVANCE;
         } else if (parts[1].contains(SORT_OCCURRENCE_TERM)) {
             this.sortStrategy = SORT_OCCURRENCE;
         }else if (parts[1].contains(SORT_POPULARITY_TERM)) {

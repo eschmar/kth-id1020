@@ -9,11 +9,13 @@ public class DocumentWrapper implements Comparable<DocumentWrapper> {
     Document doc;
     int firstOccurrence;
     int occurrences;
+    Double relevance;
 
     public DocumentWrapper(Document doc, int occurrence) {
         this.doc = doc;
         this.firstOccurrence = occurrence;
         this.occurrences = 1;
+        this.relevance = null;
     }
 
     public int compareTo(DocumentWrapper o) {
@@ -26,6 +28,7 @@ public class DocumentWrapper implements Comparable<DocumentWrapper> {
                 "doc=" + doc +
                 ", firstOccurrence=" + firstOccurrence +
                 ", occurrences=" + occurrences +
+                ", relevance=" + relevance +
                 '}';
     }
 }
