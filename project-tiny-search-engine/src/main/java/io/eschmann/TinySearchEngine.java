@@ -123,6 +123,16 @@ public class TinySearchEngine implements TinySearchEngineBase {
             }
         }
 
+        // handle cases without any operator.
+        if (temp.size() > 1) {
+            StringBuilder merger = new StringBuilder();
+            while (!temp.empty()) {
+                merger.append(temp.pop() + " ");
+            }
+
+            temp.push(merger.toString().trim());
+        }
+
         Comparable<String> computed = temp.pop();
         Query parsed;
 
