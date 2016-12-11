@@ -29,7 +29,7 @@ public class RelevanceComparator extends AbstractComparator {
     }
 
     protected double idf(int totalDocuments, int documentsContainingTerm) {
-        return (double) totalDocuments / (double) documentsContainingTerm;
+        return Math.log10((double) totalDocuments / (double) documentsContainingTerm);
     }
 
     public int compare(DocumentWrapper o1, DocumentWrapper o2) {
