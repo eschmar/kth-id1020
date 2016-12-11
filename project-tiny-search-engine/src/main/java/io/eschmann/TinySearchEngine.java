@@ -42,6 +42,10 @@ public class TinySearchEngine implements TinySearchEngineBase {
         this.log.append(message + "\n");
     }
 
+    protected void clearLog() {
+        this.log.setLength(0);
+    }
+
     public void preInserts() {
         System.out.println("preInserts");
     }
@@ -65,6 +69,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
     }
 
     public List<Document> search(String s) {
+        this.clearLog();
         this.query = parseQuery(s);
 
         if (!this.cache.containsKey(query.toString())) {
@@ -74,18 +79,33 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
         ArrayList<DocumentWrapper> result = this.cache.get(query.toString());
 
-        // todo: sort result
+        // sort result
+        Comparator comparator;
+        if (this.sortStrategy == SORT_OCCURRENCE) {
+            comparator = new OccurrenceComparator(this.orderStrategy);
+        } else if (this.sortStrategy == SORT_POPULARITY) {
+            comparator = new PopularityComparator(this.orderStrategy);
+        } else {
+            comparator = new CountComparator(this.orderStrategy);
+        }
+
+        Collections.sort(result, comparator);
+
+        if (TOGGLE_OUTPUT == 1) {
+            this.log("Result set:");
+            for (DocumentWrapper item : result) {
+                this.log(item.toString());
+            }
+
+            System.out.println("\n<DEBUG>");
+            System.out.print(this.log.toString());
+            System.out.println("</DEBUG>\n");
+        }
 
         // convert for output
         List<Document> output = new ArrayList<Document>();
         for (DocumentWrapper wrapper : result) {
             output.add(wrapper.doc);
-        }
-
-        if (TOGGLE_OUTPUT == 1) {
-            System.out.println("\n<DEBUG>");
-            System.out.print(this.log.toString());
-            System.out.println("</DEBUG>\n");
         }
 
         return output;
@@ -139,12 +159,6 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
         this.cache.put(query, result);
         this.log("Cached: " + query.toString());
-    }
-
-    private void printArrayList(List list) {
-        for (Object o : list) {
-            System.out.println(o);
-        }
     }
 
     private String getSortingStrategy(int strategy) {
