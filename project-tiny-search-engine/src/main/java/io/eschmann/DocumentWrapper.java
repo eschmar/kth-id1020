@@ -2,6 +2,8 @@ package io.eschmann;
 
 import se.kth.id1020.util.Document;
 
+import java.util.HashMap;
+
 /**
  * Created by eschmar on 03/12/16.
  */
@@ -30,5 +32,22 @@ public class DocumentWrapper implements Comparable<DocumentWrapper> {
                 ", occurrences=" + occurrences +
                 ", relevance=" + relevance +
                 '}';
+    }
+
+    protected void calculateRelevance(HashMap<String, Integer> documentWordCount, int resultCount) {
+        if (this.relevance != null) return;
+
+        Double tfidf = tf(this.occurrences, documentWordCount.get(this.doc.name));
+        tfidf *= idf(documentWordCount.size(), resultCount);
+
+        this.relevance = tfidf;
+    }
+
+    protected double tf(int occurrences, int wordCount) {
+        return (double) occurrences / (double) wordCount;
+    }
+
+    protected double idf(int totalDocuments, int documentsContainingTerm) {
+        return Math.log10((double) totalDocuments / (double) documentsContainingTerm);
     }
 }

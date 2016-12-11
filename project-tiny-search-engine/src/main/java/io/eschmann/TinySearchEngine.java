@@ -92,7 +92,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
         if (this.sortStrategy == SORT_POPULARITY) {
             comparator = new PopularityComparator(this.orderStrategy);
         } else {
-            comparator = new RelevanceComparator(this.orderStrategy, this.documentWordCount, result.size());
+            comparator = new RelevanceComparator(this.orderStrategy);
         }
 
         Collections.sort(result, comparator);
@@ -160,7 +160,10 @@ public class TinySearchEngine implements TinySearchEngineBase {
         }
 
         for (DocumentWrapper doc : node.docs) {
-            result.add(doc);
+            // calculate relevance and add to result
+            DocumentWrapper temp = new DocumentWrapper(doc.doc, doc.occurrences);
+            temp.calculateRelevance(this.documentWordCount, node.docs.size());
+            result.add(temp);
         }
 
         this.cache.put(query, result);

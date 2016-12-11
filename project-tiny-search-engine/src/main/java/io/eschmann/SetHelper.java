@@ -64,6 +64,7 @@ public class SetHelper {
 
     private static void mergeElements(DocumentWrapper a, DocumentWrapper b) {
         a.occurrences += b.occurrences;
+        a.relevance += b.relevance;
         if (b.firstOccurrence < a.firstOccurrence) {
             a.firstOccurrence = b.firstOccurrence;
         }
