@@ -22,16 +22,24 @@ public class TinySearchEngine implements TinySearchEngineBase {
     public static final int ORDER_ASC = 1;
     public static final int ORDER_DESC = -1;
 
-    private static final int TOGGLE_OUTPUT = 0;
+    private StringBuilder log;
+    private static final int TOGGLE_OUTPUT = 1;
 
     int sortStrategy = SORT_COUNT;
     int orderStrategy = ORDER_DESC;
 
     HashMap<String, IndexNode> dictionary;
+    HashMap<String, ArrayList<DocumentWrapper>> cache;
     Query query;
 
     public TinySearchEngine() {
         this.dictionary = new HashMap<String, IndexNode>();
+        this.cache = new HashMap<String, ArrayList<DocumentWrapper>>();
+        this.log = new StringBuilder();
+    }
+
+    protected void log(String message) {
+        this.log.append(message + "\n");
     }
 
     public void preInserts() {
@@ -58,22 +66,79 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
     public List<Document> search(String s) {
         this.query = parseQuery(s);
-        return null;
+
+        if (!this.cache.containsKey(query.toString())) {
+            this.log("Cache miss!");
+            this.traverseQueryAndCacheUnknowns(query);
+        }
+
+        ArrayList<DocumentWrapper> result = this.cache.get(query.toString());
+
+        // todo: sort result
+
+        // convert for output
+        List<Document> output = new ArrayList<Document>();
+        for (DocumentWrapper wrapper : result) {
+            output.add(wrapper.doc);
+        }
+
+        if (TOGGLE_OUTPUT == 1) {
+            System.out.println("\n<DEBUG>");
+            System.out.print(this.log.toString());
+            System.out.println("</DEBUG>\n");
+        }
+
+        return output;
     }
 
-    private void union(ArrayList list, DocumentWrapper wrapper) {
-        BinarySearch<DocumentWrapper> bs = new BinarySearch<DocumentWrapper>();
-        int pos = bs.search(wrapper, list);
-        if (pos < 0) {
-            list.add(-pos-1, wrapper);
+    private void traverseQueryAndCacheUnknowns(Query query) {
+        if (query.left instanceof Query) {
+            this.traverseQueryAndCacheUnknowns((Query) query.left);
+        }else if (query.left instanceof String) {
+            this.queryWordAndCacheResult(query.left.toString());
+        }
+
+        if (query.right != null && query.right instanceof Query) {
+            this.traverseQueryAndCacheUnknowns((Query) query.right);
+        }else if (query.right != null && query.right instanceof String) {
+            this.queryWordAndCacheResult(query.right.toString());
+        }
+
+        if (this.query.right == null) return;
+
+        ArrayList<DocumentWrapper> leftResult = this.cache.get(query.left.toString());
+        ArrayList<DocumentWrapper> rightResult = this.cache.get(query.right.toString());
+
+        if (query.operator.equals("+")) {
+            leftResult = SetHelper.intersection(leftResult, rightResult);
+        }else if (query.operator.equals("|")) {
+            leftResult = SetHelper.union(leftResult, rightResult);
+        }else if (query.operator.equals("-")) {
+            leftResult = SetHelper.difference(leftResult, rightResult);
+        }
+
+        this.log("Cached: " + query.toString());
+        this.cache.put(query.toString(), leftResult);
+    }
+
+    private void queryWordAndCacheResult(String query) {
+        if (this.cache.containsKey(query)) return;
+
+        ArrayList<DocumentWrapper> result = new ArrayList<DocumentWrapper>();
+        IndexNode node = this.dictionary.get(query);
+
+        if (node == null) {
+            this.cache.put(query, result);
+            this.log("Cached: " + query.toString());
             return;
         }
 
-        DocumentWrapper temp = (DocumentWrapper) list.get(pos);
-        temp.occurrences += wrapper.occurrences;
-        if (wrapper.firstOccurrence < temp.firstOccurrence) {
-            temp.firstOccurrence = wrapper.firstOccurrence;
+        for (DocumentWrapper doc : node.docs) {
+            result.add(doc);
         }
+
+        this.cache.put(query, result);
+        this.log("Cached: " + query.toString());
     }
 
     private void printArrayList(List list) {
@@ -121,14 +186,8 @@ public class TinySearchEngine implements TinySearchEngineBase {
             }
         }
 
-        // handle cases without any operator.
         if (temp.size() > 1) {
-            StringBuilder merger = new StringBuilder();
-            while (!temp.empty()) {
-                merger.append(temp.pop() + " ");
-            }
-
-            temp.push(merger.toString().trim());
+            throw new IllegalArgumentException("Invalid query. Use correct operators.");
         }
 
         Comparable<String> computed = temp.pop();
