@@ -9,7 +9,6 @@ public class Query implements Comparable<String> {
     public Comparable<String> left;
     public String operator;
     public Comparable<String> right;
-    public String cacheId;
     public boolean isSingle = true;
     private int format = 0;
 
@@ -38,7 +37,6 @@ public class Query implements Comparable<String> {
         this.left = left;
         this.operator = operator;
         this.right = right;
-        this.cacheId = null;
         this.isSingle = false;
     }
 

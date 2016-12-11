@@ -118,6 +118,8 @@ public class TinySearchEngine implements TinySearchEngineBase {
     }
 
     private void traverseQueryAndCacheUnknowns(Query query) {
+        if (this.cache.containsKey(query)) return;
+
         if (query.left instanceof Query) {
             this.traverseQueryAndCacheUnknowns((Query) query.left);
         }else if (query.left instanceof String) {
