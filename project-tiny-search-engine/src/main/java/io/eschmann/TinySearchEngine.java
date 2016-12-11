@@ -13,17 +13,15 @@ import java.util.*;
  */
 public class TinySearchEngine implements TinySearchEngineBase {
     public static final int SORT_RELEVANCE = 0;
-    public static final int SORT_OCCURRENCE = 1;
-    public static final int SORT_POPULARITY = 2;
+    public static final int SORT_POPULARITY = 1;
     public static final String SORT_RELEVANCE_TERM = "relevance";
-    public static final String SORT_OCCURRENCE_TERM = "occurrence";
     public static final String SORT_POPULARITY_TERM = "popularity";
 
     public static final int ORDER_ASC = 1;
     public static final int ORDER_DESC = -1;
 
     private StringBuilder log;
-    private static final int TOGGLE_OUTPUT = 1;
+    private static final int TOGGLE_OUTPUT = 0;
 
     int sortStrategy = SORT_RELEVANCE;
     int orderStrategy = ORDER_DESC;
@@ -91,9 +89,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
         // sort result
         Comparator comparator;
-        if (this.sortStrategy == SORT_OCCURRENCE) {
-            comparator = new OccurrenceComparator(this.orderStrategy);
-        } else if (this.sortStrategy == SORT_POPULARITY) {
+        if (this.sortStrategy == SORT_POPULARITY) {
             comparator = new PopularityComparator(this.orderStrategy);
         } else {
             comparator = new RelevanceComparator(this.orderStrategy, this.documentWordCount, result.size());
@@ -172,9 +168,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
     }
 
     private String getSortingStrategy(int strategy) {
-        if (strategy == SORT_OCCURRENCE) {
-            return SORT_OCCURRENCE_TERM;
-        }else if (strategy == SORT_POPULARITY) {
+        if (strategy == SORT_POPULARITY) {
             return SORT_POPULARITY_TERM;
         }
 
@@ -233,8 +227,6 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
         if (parts[1].contains(SORT_RELEVANCE_TERM)) {
             this.sortStrategy = SORT_RELEVANCE;
-        } else if (parts[1].contains(SORT_OCCURRENCE_TERM)) {
-            this.sortStrategy = SORT_OCCURRENCE;
         }else if (parts[1].contains(SORT_POPULARITY_TERM)) {
             this.sortStrategy = SORT_POPULARITY;
         }
