@@ -6,10 +6,7 @@ import se.kth.id1020.util.Document;
 import se.kth.id1020.util.Sentence;
 import se.kth.id1020.util.Word;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by eschmar on 01/12/16.
@@ -29,40 +26,47 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
     private static final int TOGGLE_OUTPUT = 0;
 
-    ArrayList<IndexNode> index;
     int sortStrategy = SORT_COUNT;
     int orderStrategy = ORDER_DESC;
 
+    HashMap<String, IndexNode> dictionary;
+
     public TinySearchEngine() {
-        this.index = new ArrayList<IndexNode>();
+        this.dictionary = new HashMap<String, IndexNode>();
     }
 
-    public void insert(Word word, Attributes attributes) {
-        IndexNode node = new IndexNode(word.word, attributes);
-        BinarySearch<IndexNode> bs = new BinarySearch<IndexNode>();
-        int pos = bs.search(node, this.index);
+    public void preInserts() {
+        System.out.println("preInserts");
+    }
 
-        if (pos < 0) {
-            this.index.add(-pos-1, node);
-            return;
+    public void insert(Sentence sentence, Attributes attributes) {
+        IndexNode current;
+        for (Word w : sentence.getWords()) {
+            current = this.dictionary.get(w.word);
+
+            if (current == null) {
+                this.dictionary.put(w.word, new IndexNode(w.word, attributes));
+                continue;
+            }
+
+            current.addDocument(attributes);
         }
+    }
 
-        this.index.get(pos).addDocument(attributes);
+    public void postInserts() {
+        System.out.println("postInserts");
     }
 
     public List<Document> search(String s) {
         String[] terms = parseQuery(s);
         ArrayList<DocumentWrapper> result = new ArrayList<DocumentWrapper>();
-        BinarySearch<IndexNode> bs = new BinarySearch<IndexNode>();
 
         // execute search for each query term
         for (String query : terms) {
-            IndexNode node = new IndexNode(query, null);
-            int pos = bs.search(node, this.index);
+            IndexNode node = this.dictionary.get(query);
+            if (node == null) continue;
 
-            if (pos < 0) continue;
-
-            for (DocumentWrapper doc : this.index.get(pos).docs) {
+            for (DocumentWrapper doc : node.docs) {
                 union(result, doc);
             }
         }
@@ -156,18 +160,6 @@ public class TinySearchEngine implements TinySearchEngineBase {
         }
 
         return result;
-    }
-
-    public void preInserts() {
-        System.out.println("preInserts");
-    }
-
-    public void insert(Sentence sentence, Attributes attributes) {
-
-    }
-
-    public void postInserts() {
-        System.out.println("postInserts");
     }
 
     public String infix(String s) {
