@@ -30,6 +30,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
     int orderStrategy = ORDER_DESC;
 
     HashMap<String, IndexNode> dictionary;
+    Query query;
 
     public TinySearchEngine() {
         this.dictionary = new HashMap<String, IndexNode>();
@@ -58,50 +59,8 @@ public class TinySearchEngine implements TinySearchEngineBase {
     }
 
     public List<Document> search(String s) {
-        String[] terms = parseQuery(s);
-        ArrayList<DocumentWrapper> result = new ArrayList<DocumentWrapper>();
-
-        // execute search for each query term
-        for (String query : terms) {
-            IndexNode node = this.dictionary.get(query);
-            if (node == null) continue;
-
-            for (DocumentWrapper doc : node.docs) {
-                union(result, doc);
-            }
-        }
-
-        if (TOGGLE_OUTPUT == 1) {
-            System.out.println("\n<debug>");
-            printArrayList(result);
-        }
-
-        // sort result
-        Comparator comparator;
-        if (this.sortStrategy == SORT_OCCURRENCE) {
-            comparator = new OccurrenceComparator(this.orderStrategy);
-        } else if (this.sortStrategy == SORT_POPULARITY) {
-            comparator = new PopularityComparator(this.orderStrategy);
-        } else {
-            comparator = new CountComparator(this.orderStrategy);
-        }
-
-        BubbleSort bubble = new BubbleSort(comparator);
-        bubble.sort(result);
-
-        if (TOGGLE_OUTPUT == 1) {
-            System.out.println("post sort:");
-            printArrayList(result);
-            System.out.println("</debug>\n");
-        }
-
-        // convert for output
-        List<Document> output = new ArrayList<Document>();
-        for (DocumentWrapper wrapper : result) {
-            output.add(wrapper.doc);
-        }
-
-        return output;
+        this.query = parseQuery(s);
+        return null;
     }
 
     private void union(ArrayList list, DocumentWrapper wrapper) {
@@ -139,11 +98,41 @@ public class TinySearchEngine implements TinySearchEngineBase {
         return this.orderStrategy == ORDER_DESC ? "desc" : "asc";
     }
 
-    private String[] parseQuery(String query) {
+    private Query parseQuery(String query) {
         String[] parts = query.split("orderby");
-        String[] result = parts[0].split(" ");
+        String[] terms = parts[0].split(" ");
 
-        if (parts.length < 2) return result;
+        Stack<Comparable<String>> source = new Stack<Comparable<String>>();
+        Stack<Comparable<String>> temp = new Stack<Comparable<String>>();
+
+        for (int i = 0; i < terms.length; i++) {
+            source.push(terms[i]);
+        }
+
+        Comparable<String> current;
+        String term;
+        while (!source.empty()) {
+            term = (String) source.pop();
+
+            if (term.length() == 1 && OPERATORS.contains(term)) {
+                Comparable<String> a = temp.pop();
+                Comparable<String> b = temp.pop();
+                temp.push(new Query(a, term, b));
+            }else {
+                temp.push(term);
+            }
+        }
+
+        Comparable<String> computed = temp.pop();
+        Query parsed;
+
+        if (computed instanceof String) {
+            parsed = new Query(computed);
+        }else {
+            parsed = (Query) computed;
+        }
+
+        if (parts.length < 2) return parsed;
 
         if (parts[1].contains("desc")) {
             this.orderStrategy = ORDER_DESC;
@@ -159,37 +148,16 @@ public class TinySearchEngine implements TinySearchEngineBase {
             this.sortStrategy = SORT_POPULARITY;
         }
 
-        return result;
+        return parsed;
     }
 
     public String infix(String s) {
-        String[] terms = this.parseQuery(s);
-        Stack<String> operands = new Stack<String>();
-        Stack<String> temp = new Stack<String>();
+        Query query = this.parseQuery(s);
+        query.setFormat(Query.FORMAT_INFIX);
 
-        for (int i = 0; i < terms.length; i++) {
-            operands.push(terms[i]);
-        }
-
-        String current;
-        while (!operands.empty()) {
-            current = operands.pop();
-
-            // check if operator
-            if (current.length() == 1 && OPERATORS.contains(current)) {
-                String a = temp.pop();
-                String b = temp.pop();
-
-                temp.push("(" + a + " " + current + " " + b + ")");
-            }else {
-                temp.push(current);
-            }
-        }
-
-        String parsed = temp.pop();
+        String parsed = query.toString();
         parsed += " orderby " + getSortingStrategy(this.sortStrategy);
         parsed += " " + getOrderStrategy(this.orderStrategy);
-
         return parsed;
     }
 }
