@@ -22,8 +22,6 @@ public class TinySearchEngine implements TinySearchEngineBase {
     public static final int ORDER_ASC = 1;
     public static final int ORDER_DESC = -1;
 
-    public static final String OPERATORS = "+|-";
-
     private static final int TOGGLE_OUTPUT = 0;
 
     int sortStrategy = SORT_COUNT;
@@ -114,7 +112,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
         while (!source.empty()) {
             term = (String) source.pop();
 
-            if (term.length() == 1 && OPERATORS.contains(term)) {
+            if (term.length() == 1 && Query.OPERATORS.contains(term)) {
                 Comparable<String> a = temp.pop();
                 Comparable<String> b = temp.pop();
                 temp.push(new Query(a, term, b));

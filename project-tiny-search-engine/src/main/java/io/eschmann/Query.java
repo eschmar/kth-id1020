@@ -14,6 +14,7 @@ public class Query implements Comparable<String> {
     private int format = 0;
 
     public static final String OPERATORS = "+|-";
+    public static final String COMMUTATIVE_OPERATORS = "+|";
 
     public static final int FORMAT_INFIX = 0;
     public static final int FORMAT_PREFIX = 1;
@@ -24,18 +25,21 @@ public class Query implements Comparable<String> {
     }
 
     public Query(Comparable<String> left, String operator, Comparable<String> right) {
+        if (operator.length() != 1 || !OPERATORS.contains(operator)) {
+            throw new IllegalArgumentException("Invalid operator!");
+        }
+
+        if (COMMUTATIVE_OPERATORS.contains(operator) && left.toString().compareTo(right.toString()) >= 1) {
+            Comparable<String> temp = left;
+            left = right;
+            right = temp;
+        }
+
         this.left = left;
         this.operator = operator;
         this.right = right;
         this.cacheId = null;
         this.isSingle = false;
-
-        // todo
-        // check for commutativity!
-
-        if (operator.length() != 1 || !OPERATORS.contains(operator)) {
-            throw new IllegalArgumentException("Invalid operator!");
-        }
     }
 
     public void setFormat(int format) {
