@@ -3,11 +3,13 @@ package io.eschmann;
 import se.kth.id1020.TinySearchEngineBase;
 import se.kth.id1020.util.Attributes;
 import se.kth.id1020.util.Document;
+import se.kth.id1020.util.Sentence;
 import se.kth.id1020.util.Word;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by eschmar on 01/12/16.
@@ -22,6 +24,8 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
     public static final int ORDER_ASC = 1;
     public static final int ORDER_DESC = -1;
+
+    public static final String OPERATORS = "+|-";
 
     private static final int TOGGLE_OUTPUT = 0;
 
@@ -48,7 +52,6 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
     public List<Document> search(String s) {
         String[] terms = parseQuery(s);
-        System.out.println("\n# " + this.getParsedQueryVisualisation(terms) + "\n");
         ArrayList<DocumentWrapper> result = new ArrayList<DocumentWrapper>();
         BinarySearch<IndexNode> bs = new BinarySearch<IndexNode>();
 
@@ -118,19 +121,6 @@ public class TinySearchEngine implements TinySearchEngineBase {
         }
     }
 
-    private String getParsedQueryVisualisation(String[] terms) {
-        StringBuilder out = new StringBuilder();
-        out.append("Parsed query: [" + terms[0]);
-
-        for (int i = 1; i < terms.length; i++) {
-            out.append(", " + terms[i]);
-        }
-
-        out.append("] orderby " + getSortingStrategy(this.sortStrategy));
-        out.append(" " + getOrderStrategy(this.orderStrategy));
-        return out.toString();
-    }
-
     private String getSortingStrategy(int strategy) {
         if (strategy == SORT_OCCURRENCE) {
             return SORT_OCCURRENCE_TERM;
@@ -146,15 +136,16 @@ public class TinySearchEngine implements TinySearchEngineBase {
     }
 
     private String[] parseQuery(String query) {
-        if (query.contains(":desc")) {
+        String[] parts = query.split("orderby");
+        String[] result = parts[0].split(" ");
+
+        if (parts.length < 2) return result;
+
+        if (parts[1].contains("desc")) {
             this.orderStrategy = ORDER_DESC;
-        }else if (query.contains(":asc")) {
+        }else if (parts[1].contains("asc")) {
             this.orderStrategy = ORDER_ASC;
         }
-
-        String[] parts = query.split(":orderby");
-        String[] result = parts[0].split(" ");
-        if (parts.length < 2) return result;
 
         if (parts[1].contains(SORT_COUNT_TERM)) {
             this.sortStrategy = SORT_COUNT;
@@ -165,5 +156,48 @@ public class TinySearchEngine implements TinySearchEngineBase {
         }
 
         return result;
+    }
+
+    public void preInserts() {
+        System.out.println("preInserts");
+    }
+
+    public void insert(Sentence sentence, Attributes attributes) {
+
+    }
+
+    public void postInserts() {
+        System.out.println("postInserts");
+    }
+
+    public String infix(String s) {
+        String[] terms = this.parseQuery(s);
+        Stack<String> operands = new Stack<String>();
+        Stack<String> temp = new Stack<String>();
+
+        for (int i = 0; i < terms.length; i++) {
+            operands.push(terms[i]);
+        }
+
+        String current;
+        while (!operands.empty()) {
+            current = operands.pop();
+
+            // check if operator
+            if (current.length() == 1 && OPERATORS.contains(current)) {
+                String a = temp.pop();
+                String b = temp.pop();
+
+                temp.push("(" + a + " " + current + " " + b + ")");
+            }else {
+                temp.push(current);
+            }
+        }
+
+        String parsed = temp.pop();
+        parsed += " orderby " + getSortingStrategy(this.sortStrategy);
+        parsed += " " + getOrderStrategy(this.orderStrategy);
+
+        return parsed;
     }
 }
