@@ -7,4 +7,4 @@
 - [x] Lab 005 - Graph
 - [ ] Project - Tiny Search Engine
 
-\* entirely theoretical and therefor not included in this repository.
+\* entirely theoretical and therefore not included in this repository.
