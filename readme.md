@@ -5,6 +5,6 @@
 - [x] Lab 003 - Bubble Sort
 - [x] Lab 004 - Trie
 - [x] Lab 005 - Graph
-- [ ] Project - Tiny Search Engine
+- [x] Project - Tiny Search Engine
 
 \* entirely theoretical and therefore not included in this repository.
