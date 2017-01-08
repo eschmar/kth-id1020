@@ -21,7 +21,7 @@ public class TinySearchEngine implements TinySearchEngineBase {
     public static final int ORDER_DESC = -1;
 
     private StringBuilder log;
-    private static final int TOGGLE_OUTPUT = 0;
+    private static final int TOGGLE_OUTPUT = 1;
 
     int sortStrategy = SORT_RELEVANCE;
     int orderStrategy = ORDER_DESC;
@@ -163,7 +163,8 @@ public class TinySearchEngine implements TinySearchEngineBase {
 
         for (DocumentWrapper doc : node.docs) {
             // calculate relevance and add to result
-            DocumentWrapper temp = new DocumentWrapper(doc.doc, doc.occurrences);
+            DocumentWrapper temp = new DocumentWrapper(doc.doc, doc.firstOccurrence);
+            temp.occurrences = doc.occurrences;
             temp.calculateRelevance(this.documentWordCount, node.docs.size());
             result.add(temp);
         }
